@@ -1,0 +1,9 @@
+{
+  "HomePage": {
+    "title": "欢迎使用您的新项目。",
+    "welcomeBack": "欢迎回来，{email}",
+    "adminPanel": "前往管理面板",
+    "documentation": "文档",
+    "updateTip": "通过编辑此页面进行更新"
+  }
+}

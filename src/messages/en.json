@@ -1,0 +1,9 @@
+{
+  "HomePage": {
+    "title": "Welcome to your new project.",
+    "welcomeBack": "Welcome back, {email}",
+    "adminPanel": "Go to admin panel",
+    "documentation": "Documentation",
+    "updateTip": "Update this page by editing"
+  }
+}
