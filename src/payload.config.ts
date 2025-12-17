@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { en } from 'payload/i18n/en'
 import { zh } from 'payload/i18n/zh'
+import { openapi, scalar } from 'payload-oapi'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -35,6 +36,14 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
+    openapi({
+      openapiVersion: '3.0',
+      metadata: {
+        title: 'Dev API',
+        version: '0.0.1',
+      },
+    }),
+    scalar({}),
     s3Storage({
       collections: {
         media: true,
