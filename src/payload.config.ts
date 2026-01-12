@@ -1,23 +1,22 @@
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { s3Storage } from '@payloadcms/storage-s3'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { en } from 'payload/i18n/en'
 import { zh } from 'payload/i18n/zh'
-import { openapi, scalar } from 'payload-oapi'
-
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
+import { plugins } from './payload/plugins'
+import { collections } from './payload/collections'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || '',
   admin: {
-    user: Users.slug,
+    user: 'users',
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -25,9 +24,14 @@ export default buildConfig({
   i18n: {
     supportedLanguages: { en, zh },
   },
-  collections: [Users, Media],
+  collections,
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
+  email: resendAdapter({
+    defaultFromAddress: 'no-reply@concursor.com',
+    defaultFromName: 'Morpho',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -35,28 +39,5 @@ export default buildConfig({
     url: process.env.DATABASE_URI || '',
   }),
   sharp,
-  plugins: [
-    openapi({
-      openapiVersion: '3.0',
-      metadata: {
-        title: 'Dev API',
-        version: '0.0.1',
-      },
-    }),
-    scalar({}),
-    s3Storage({
-      collections: {
-        media: true,
-      },
-      bucket: process.env.R2_BUCKET || '',
-      config: {
-        credentials: {
-          accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
-          secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
-        },
-        region: 'auto',
-        endpoint: process.env.R2_ENDPOINT || '',
-      },
-    }),
-  ],
+  plugins,
 })
