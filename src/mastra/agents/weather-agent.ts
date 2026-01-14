@@ -2,6 +2,7 @@ import { Agent } from '@mastra/core/agent'
 import { Memory } from '@mastra/memory'
 import { LibSQLStore } from '@mastra/libsql'
 import { weatherTool } from '../tools/weather-tool'
+import { edenDemoTool } from '../tools/eden-demo'
 
 export const weatherAgent = new Agent({
   name: '天气代理',
@@ -21,7 +22,7 @@ export const weatherAgent = new Agent({
       使用 weatherTool 来获取当前天气数据。
 `,
   model: 'modelscope/Qwen/Qwen3-Coder-30B-A3B-Instruct',
-  tools: { weatherTool },
+  tools: { weatherTool, edenDemoTool },
 
   memory: new Memory({
     storage: new LibSQLStore({

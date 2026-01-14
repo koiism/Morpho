@@ -44,5 +44,7 @@ const app = new Elysia({
     return uiMessages
   })
 
+export type APP = typeof app
+
 export const GET = app.handle
 export const POST = app.handle
