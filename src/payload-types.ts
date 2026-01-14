@@ -75,6 +75,8 @@ export interface Config {
     passkeys: Passkey;
     'admin-invitations': AdminInvitation;
     media: Media;
+    'status-attributes': StatusAttribute;
+    'main-attributes': MainAttribute;
     'payload-kv': PayloadKv;
     'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
@@ -95,6 +97,8 @@ export interface Config {
     passkeys: PasskeysSelect<false> | PasskeysSelect<true>;
     'admin-invitations': AdminInvitationsSelect<false> | AdminInvitationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    'status-attributes': StatusAttributesSelect<false> | StatusAttributesSelect<true>;
+    'main-attributes': MainAttributesSelect<false> | MainAttributesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -447,6 +451,42 @@ export interface FolderInterface {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "status-attributes".
+ */
+export interface StatusAttribute {
+  id: string;
+  /**
+   * AI 生成的 Emoji 图标
+   */
+  emoji?: string | null;
+  name: string;
+  /**
+   * 40 字以内，用于告诉智能体属性的作用
+   */
+  guidelines?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "main-attributes".
+ */
+export interface MainAttribute {
+  id: string;
+  /**
+   * AI 生成的 Emoji 图标
+   */
+  emoji?: string | null;
+  name: string;
+  /**
+   * 40 字以内，用于告诉智能体属性的作用
+   */
+  guidelines?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -500,6 +540,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'status-attributes';
+        value: string | StatusAttribute;
+      } | null)
+    | ({
+        relationTo: 'main-attributes';
+        value: string | MainAttribute;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -669,6 +717,28 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "status-attributes_select".
+ */
+export interface StatusAttributesSelect<T extends boolean = true> {
+  emoji?: T;
+  name?: T;
+  guidelines?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "main-attributes_select".
+ */
+export interface MainAttributesSelect<T extends boolean = true> {
+  emoji?: T;
+  name?: T;
+  guidelines?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
