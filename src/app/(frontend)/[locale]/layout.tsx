@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
+import { Providers } from '@/providers'
 import '../styles.css'
 
 export const metadata = {
@@ -21,7 +22,9 @@ export default async function RootLayout({
     <html lang={locale} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <main>{children}</main>
+          <Providers>
+            <main>{children}</main>
+          </Providers>
         </NextIntlClientProvider>
       </body>
     </html>
