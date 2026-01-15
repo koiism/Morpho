@@ -12,8 +12,8 @@ export function DashboardHeader() {
         <h1 className="text-3xl font-bold tracking-tight">{t('title')}</h1>
         <p className="text-muted-foreground">{t('subtitle')}</p>
       </div>
-      <div className="flex items-center gap-2">
-        <Button>
+      <div className="flex items-center gap-2 w-full md:w-auto">
+        <Button className="w-full md:w-auto">
           <Plus className="mr-2 h-4 w-4" />
           {t('newGame')}
         </Button>

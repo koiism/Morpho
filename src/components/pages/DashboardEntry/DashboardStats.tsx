@@ -5,7 +5,7 @@ export function DashboardStats() {
   const t = useTranslations('Dashboard.entry.stats')
 
   return (
-    <div className="grid gap-4 md:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
       <div className="rounded-xl border bg-card p-4 text-card-foreground shadow-sm">
         <div className="text-2xl font-bold">12</div>
         <div className="text-xs text-muted-foreground">{t('activeGames')}</div>
