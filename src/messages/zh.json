@@ -5,5 +5,36 @@
     "adminPanel": "前往管理面板",
     "documentation": "文档",
     "updateTip": "通过编辑此页面进行更新"
+  },
+  "LandingPage": {
+    "hero": {
+      "badge": "AI 驱动的 TRPG 体验",
+      "titlePrefix": "编织你的",
+      "titleHighlight": "永恒传奇",
+      "description": "踏入一个想象力是唯一边界的世界。Morpho 结合先进 AI 与经典桌面角色扮演游戏，创造沉浸式、不断演变的故事，随你的每一个选择而改变。",
+      "startJourney": "开始旅程",
+      "exploreFeatures": "探索功能"
+    },
+    "nav": {
+      "login": "登录",
+      "signup": "注册"
+    },
+    "features": {
+      "worldGeneration": {
+        "title": "AI 世界生成",
+        "description": "描述你梦想中的设定，看着 Morpho 在几秒钟内编织出一个包含历史、派系和传说的完整世界。"
+      },
+      "intelligentCharacters": {
+        "title": "智能角色",
+        "description": "创建深度、不断演变的角色，具有自动属性生成和真正重要的 AI 驱动背景故事。"
+      },
+      "dynamicStorytelling": {
+        "title": "动态叙事",
+        "description": "体验一场永无止境的战役，AI 地下城主会根据你队伍的行动调整叙事。"
+      }
+    },
+    "footer": {
+      "copyright": "© {year} Morpho. 保留所有权利。"
+    }
   }
 }

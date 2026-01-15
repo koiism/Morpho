@@ -5,5 +5,36 @@
     "adminPanel": "Go to admin panel",
     "documentation": "Documentation",
     "updateTip": "Update this page by editing"
+  },
+  "LandingPage": {
+    "hero": {
+      "badge": "AI-Powered TRPG Experience",
+      "titlePrefix": "Weave Your",
+      "titleHighlight": "Eternal Legend",
+      "description": "Step into a world where your imagination is the only limit. Morpho combines advanced AI with classic tabletop roleplaying to create immersive, evolving stories that adapt to your every choice.",
+      "startJourney": "Start Your Journey",
+      "exploreFeatures": "Explore Features"
+    },
+    "nav": {
+      "login": "Log In",
+      "signup": "Sign Up"
+    },
+    "features": {
+      "worldGeneration": {
+        "title": "AI World Generation",
+        "description": "Describe your dream setting and watch as Morpho weaves a complete world with history, factions, and lore in seconds."
+      },
+      "intelligentCharacters": {
+        "title": "Intelligent Characters",
+        "description": "Create deep, evolving characters with automated stat generation and AI-driven backstories that matter."
+      },
+      "dynamicStorytelling": {
+        "title": "Dynamic Storytelling",
+        "description": "Experience a never-ending campaign where an AI Dungeon Master adapts the narrative to your party's actions."
+      }
+    },
+    "footer": {
+      "copyright": "© {year} Morpho. All rights reserved."
+    }
   }
 }

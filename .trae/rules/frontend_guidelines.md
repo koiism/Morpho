@@ -42,6 +42,17 @@ globs: src/app/(frontend)/**,src/components/**,src/lib/**
 - 客户端全局状态可使用 Zustand
 - 复杂表单使用 `react-hook-form` 配合 `zod` 进行验证。
 
+### 2.5 国际化 (i18n)
+
+- 所有用户可见的文案必须支持多语言，禁止硬编码字符串。
+- 使用 `next-intl` 进行国际化管理，翻译文件位于 `src/messages/*.json`。
+
+### 2.6 样式与主题
+
+- **严禁**使用 Tailwind 原生颜色（如 `bg-zinc-900`, `text-blue-500`）。
+- **必须**使用 `styles.css` 中定义的语义化 CSS 变量（如 `bg-background`, `text-primary`, `bg-card`）。
+- 确保组件在亮色和暗色模式下均有良好的视觉表现。
+
 ## 3. 代码风格
 
 - 严格遵循 TypeScript 类型定义，避免使用 `any`。
