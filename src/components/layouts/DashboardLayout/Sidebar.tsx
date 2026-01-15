@@ -20,7 +20,6 @@ interface NavItem {
 
 export function Sidebar({ className, isCollapsed }: SidebarProps) {
   const pathname = usePathname()
-  console.log('pathname', pathname)
   const { user } = useUserInfo()
   const t = useTranslations('Dashboard.nav')
 

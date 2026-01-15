@@ -1,21 +1,11 @@
 'use client'
 
-import { useSession } from '@/lib/auth-client'
+import { useCachedSession } from '@/hooks/useCachedSession'
 import React, { createContext, useContext } from 'react'
-import type { User as UserCollection } from '@/payload-types'
+import type { User } from '@/payload-types'
 
-// type User = typeof useSession extends () => { data: infer D }
-//   ? D extends { user: infer U }
-//     ? U
-//     : never
-//   : never
-type User = UserCollection
-
-type Session = typeof useSession extends () => { data: infer D }
-  ? D extends { session: infer S }
-    ? S
-    : never
-  : never
+type SessionData = NonNullable<ReturnType<typeof useCachedSession>['data']>
+type Session = SessionData['session']
 
 interface UserInfoContextType {
   user: User | null
@@ -32,15 +22,15 @@ const UserInfoContext = createContext<UserInfoContextType>({
 })
 
 export const UserInfoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { data, isPending, error } = useSession()
+  const { data, isPending, error } = useCachedSession()
 
   return (
     <UserInfoContext.Provider
       value={{
-        user: (data?.user as unknown as User) ?? null,
+        user: data?.user ?? null,
         session: data?.session ?? null,
         loading: isPending,
-        error: error ?? null,
+        error: error,
       }}
     >
       {children}
