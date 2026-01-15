@@ -36,5 +36,41 @@
     "footer": {
       "copyright": "© {year} Morpho. 保留所有权利。"
     }
+  },
+  "Dashboard": {
+    "nav": {
+      "dashboard": "概览",
+      "myGames": "我的游戏",
+      "scripts": "剧本",
+      "characters": "角色",
+      "worlds": "世界",
+      "settings": "设置"
+    },
+    "entry": {
+      "title": "仪表盘",
+      "subtitle": "欢迎回到你的冒险旅程。",
+      "newGame": "新建游戏",
+      "searchPlaceholder": "搜索...",
+      "stats": {
+        "activeGames": "进行中游戏",
+        "characters": "角色数量",
+        "worldsCreated": "已创建世界",
+        "playTime": "游玩时长"
+      },
+      "tabs": {
+        "games": "游戏",
+        "characters": "角色",
+        "worlds": "世界",
+        "scripts": "剧本"
+      },
+      "sections": {
+        "activeGames": "进行中的游戏",
+        "archivedGames": "已归档的游戏"
+      },
+      "actions": {
+        "play": "开始",
+        "edit": "编辑"
+      }
+    }
   }
 }

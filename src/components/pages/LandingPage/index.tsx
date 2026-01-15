@@ -2,10 +2,10 @@
 
 import React from 'react'
 import { motion } from 'motion/react'
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Sparkles, ScrollText, Users, Dna } from 'lucide-react'
+import { Link } from '@/i18n/routing'
 
 const containerVariants = {
   hidden: { opacity: 0 },

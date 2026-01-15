@@ -36,5 +36,41 @@
     "footer": {
       "copyright": "© {year} Morpho. All rights reserved."
     }
+  },
+  "Dashboard": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "myGames": "My Games",
+      "scripts": "Scripts",
+      "characters": "Characters",
+      "worlds": "Worlds",
+      "settings": "Settings"
+    },
+    "entry": {
+      "title": "Dashboard",
+      "subtitle": "Welcome back to your adventures.",
+      "newGame": "New Game",
+      "searchPlaceholder": "Search...",
+      "stats": {
+        "activeGames": "Active Games",
+        "characters": "Characters",
+        "worldsCreated": "Worlds Created",
+        "playTime": "Play Time"
+      },
+      "tabs": {
+        "games": "Games",
+        "characters": "Characters",
+        "worlds": "Worlds",
+        "scripts": "Scripts"
+      },
+      "sections": {
+        "activeGames": "Active Games",
+        "archivedGames": "Archived Games"
+      },
+      "actions": {
+        "play": "Play",
+        "edit": "Edit"
+      }
+    }
   }
 }
