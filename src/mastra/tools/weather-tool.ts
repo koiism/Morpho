@@ -22,9 +22,9 @@ interface WeatherResponse {
 
 export const weatherTool = createTool({
   id: 'weatherTool',
-  description: 'Get current weather for a location',
+  description: '获取城市的天气信息',
   inputSchema: z.object({
-    location: z.string().describe('City name'),
+    location: z.string().describe('城市名称（必须翻译成英文，例如："天津" -> "Tianjin"）'),
   }),
   outputSchema: z.object({
     temperature: z.number(),

@@ -77,6 +77,10 @@ export interface Config {
     media: Media;
     'status-attributes': StatusAttribute;
     'main-attributes': MainAttribute;
+    worlds: World;
+    scripts: Script;
+    characters: Character;
+    'game-saves': GameSave;
     'payload-kv': PayloadKv;
     'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
@@ -99,6 +103,10 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     'status-attributes': StatusAttributesSelect<false> | StatusAttributesSelect<true>;
     'main-attributes': MainAttributesSelect<false> | MainAttributesSelect<true>;
+    worlds: WorldsSelect<false> | WorldsSelect<true>;
+    scripts: ScriptsSelect<false> | ScriptsSelect<true>;
+    characters: CharactersSelect<false> | CharactersSelect<true>;
+    'game-saves': GameSavesSelect<false> | GameSavesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -201,7 +209,7 @@ export interface User {
   /**
    * The role/ roles of the user
    */
-  role?: ('admin' | 'user' | 'publisher')[] | null;
+  role?: ('admin' | 'user' | 'player')[] | null;
   /**
    * Whether the user is banned from the platform
    */
@@ -397,7 +405,7 @@ export interface Passkey {
  */
 export interface AdminInvitation {
   id: string;
-  role: 'admin' | 'user' | 'publisher';
+  role: 'admin' | 'user' | 'player';
   token: string;
   url?: string | null;
   updatedAt: string;
@@ -487,6 +495,226 @@ export interface MainAttribute {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "worlds".
+ */
+export interface World {
+  id: string;
+  name: string;
+  /**
+   * 世界的运行法则
+   */
+  rules?: string | null;
+  cover?: (string | null) | Media;
+  /**
+   * 状态 Relationship 数组，比如 HP、MP 等
+   */
+  statusAttributes?: (string | StatusAttribute)[] | null;
+  /**
+   * 五维到八维，主属性 Relationship 数组
+   */
+  mainAttributes?: (string | MainAttribute)[] | null;
+  attributeTokenLimit?: number | null;
+  derivedAttributes?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scripts".
+ */
+export interface Script {
+  id: string;
+  name: string;
+  description?: string | null;
+  cover?: (string | null) | Media;
+  world?: (string | null) | World;
+  npcs?:
+    | {
+        name: string;
+        gender?: ('male' | 'female' | 'other') | null;
+        age?: number | null;
+        /**
+         * 从预设的头像中，根据性别、年龄随机选择头像
+         */
+        avatar?: (string | null) | Media;
+        /**
+         * 人设、背景故事
+         */
+        description?: string | null;
+        hasMetPlayer?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  characterRelationships?:
+    | {
+        /**
+         * 请输入 NPC 名称
+         */
+        from: string;
+        /**
+         * 请输入 NPC 名称
+         */
+        to: string;
+        isBidirectional?: boolean | null;
+        relation: string;
+        id?: string | null;
+      }[]
+    | null;
+  acts?:
+    | {
+        name: string;
+        background?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  actTransitions?:
+    | {
+        /**
+         * 请输入起始幕次名称
+         */
+        from: string;
+        /**
+         * 请输入目标幕次名称
+         */
+        to: string;
+        /**
+         * 提示词，剧情满足锚点时推进到下一个阶段，例如玩家获得某个关键道具，或导致某个 NPC死亡等确定性事件
+         */
+        conditionAnchor: string;
+        /**
+         * 触发锚点时，历史会被 append 到上下文中
+         */
+        generateHistory?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * 标记当前处于哪个幕次
+   */
+  currentAct?: string | null;
+  mainObjectives?:
+    | {
+        objective: string;
+        id?: string | null;
+      }[]
+    | null;
+  failCondition?: string | null;
+  attributeTokenLimit?: number | null;
+  derivedAttributes?:
+    | {
+        name: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "characters".
+ */
+export interface Character {
+  id: string;
+  name: string;
+  gender: string;
+  species: string;
+  /**
+   * 人设、背景故事等
+   */
+  description?: string | null;
+  mainAttributes?:
+    | {
+        attribute: string | MainAttribute;
+        value: number;
+        id?: string | null;
+      }[]
+    | null;
+  otherAttributes?:
+    | {
+        name: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  buffs?:
+    | {
+        name: string;
+        /**
+         * 效用和代价
+         */
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  skills?:
+    | {
+        name: string;
+        /**
+         * 效用和代价
+         */
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "game-saves".
+ */
+export interface GameSave {
+  id: string;
+  /**
+   * 每次更新存档时自动更新
+   */
+  lastInteractionTime?: string | null;
+  script: string | Script;
+  isGameOver?: boolean | null;
+  aiMemoryId?: string | null;
+  /**
+   * 适配多人游戏
+   */
+  characterStates?:
+    | {
+        characterSnapshot?:
+          | {
+              [k: string]: unknown;
+            }
+          | unknown[]
+          | string
+          | number
+          | boolean
+          | null;
+        inventory?:
+          | {
+              name: string;
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  scriptSnapshot?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -548,6 +776,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'main-attributes';
         value: string | MainAttribute;
+      } | null)
+    | ({
+        relationTo: 'worlds';
+        value: string | World;
+      } | null)
+    | ({
+        relationTo: 'scripts';
+        value: string | Script;
+      } | null)
+    | ({
+        relationTo: 'characters';
+        value: string | Character;
+      } | null)
+    | ({
+        relationTo: 'game-saves';
+        value: string | GameSave;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -737,6 +981,155 @@ export interface MainAttributesSelect<T extends boolean = true> {
   emoji?: T;
   name?: T;
   guidelines?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "worlds_select".
+ */
+export interface WorldsSelect<T extends boolean = true> {
+  name?: T;
+  rules?: T;
+  cover?: T;
+  statusAttributes?: T;
+  mainAttributes?: T;
+  attributeTokenLimit?: T;
+  derivedAttributes?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "scripts_select".
+ */
+export interface ScriptsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  cover?: T;
+  world?: T;
+  npcs?:
+    | T
+    | {
+        name?: T;
+        gender?: T;
+        age?: T;
+        avatar?: T;
+        description?: T;
+        hasMetPlayer?: T;
+        id?: T;
+      };
+  characterRelationships?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        isBidirectional?: T;
+        relation?: T;
+        id?: T;
+      };
+  acts?:
+    | T
+    | {
+        name?: T;
+        background?: T;
+        id?: T;
+      };
+  actTransitions?:
+    | T
+    | {
+        from?: T;
+        to?: T;
+        conditionAnchor?: T;
+        generateHistory?: T;
+        id?: T;
+      };
+  currentAct?: T;
+  mainObjectives?:
+    | T
+    | {
+        objective?: T;
+        id?: T;
+      };
+  failCondition?: T;
+  attributeTokenLimit?: T;
+  derivedAttributes?:
+    | T
+    | {
+        name?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "characters_select".
+ */
+export interface CharactersSelect<T extends boolean = true> {
+  name?: T;
+  gender?: T;
+  species?: T;
+  description?: T;
+  mainAttributes?:
+    | T
+    | {
+        attribute?: T;
+        value?: T;
+        id?: T;
+      };
+  otherAttributes?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        id?: T;
+      };
+  buffs?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        id?: T;
+      };
+  skills?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "game-saves_select".
+ */
+export interface GameSavesSelect<T extends boolean = true> {
+  lastInteractionTime?: T;
+  script?: T;
+  isGameOver?: T;
+  aiMemoryId?: T;
+  characterStates?:
+    | T
+    | {
+        characterSnapshot?: T;
+        inventory?:
+          | T
+          | {
+              name?: T;
+              description?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  scriptSnapshot?: T;
   updatedAt?: T;
   createdAt?: T;
 }

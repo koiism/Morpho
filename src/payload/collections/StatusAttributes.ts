@@ -23,7 +23,6 @@ export const StatusAttributes: CollectionConfig = {
       type: 'text',
       label: '名称',
       required: true,
-      localized: true,
     },
     {
       name: 'guidelines',

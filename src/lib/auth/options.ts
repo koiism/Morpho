@@ -100,7 +100,7 @@ export const betterAuthPluginOptions = {
     adminRoles: ['admin'],
     defaultRole: 'user',
     defaultAdminRole: 'admin',
-    roles: ['user', 'admin', 'publisher'] as const,
+    roles: ['user', 'admin', 'player'] as const,
     allowedFields: ['name'],
   },
   accounts: {
