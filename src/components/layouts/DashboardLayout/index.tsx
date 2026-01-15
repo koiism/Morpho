@@ -5,9 +5,8 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { Sidebar } from './Sidebar'
 import { cn } from '@/lib/utils'
 import { LimelightNav } from '@/components/ui/shadcn-io/limelight-nav'
-import { LayoutDashboard, Gamepad2, ScrollText, Users, Globe, Settings } from 'lucide-react'
-import { useTranslations } from 'next-intl'
 import { usePathname, useRouter } from '@/i18n/routing'
+import { useNavItems } from './useNavItems'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -17,48 +16,9 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  const t = useTranslations('Dashboard.nav')
+  const items = useNavItems()
 
-  const navItems = [
-    {
-      id: 'dashboard',
-      icon: <LayoutDashboard />,
-      label: t('dashboard'),
-      href: '/',
-    },
-    {
-      id: 'games',
-      icon: <Gamepad2 />,
-      label: t('myGames'),
-      href: '/games',
-    },
-    {
-      id: 'scripts',
-      icon: <ScrollText />,
-      label: t('scripts'),
-      href: '/scripts',
-    },
-    {
-      id: 'characters',
-      icon: <Users />,
-      label: t('characters'),
-      href: '/characters',
-    },
-    {
-      id: 'worlds',
-      icon: <Globe />,
-      label: t('worlds'),
-      href: '/worlds',
-    },
-    {
-      id: 'settings',
-      icon: <Settings />,
-      label: t('settings'),
-      href: '/settings',
-    },
-  ]
-
-  const activeIndex = navItems.findIndex((item) => {
+  const activeIndex = items.findIndex((item) => {
     if (item.href === '/') return pathname === '/'
     return pathname?.startsWith(item.href)
   })
@@ -109,8 +69,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex-1 overflow-y-auto bg-background/50 backdrop-blur-sm">{children}</div>
         <div className="shrink-0">
           <LimelightNav
-            items={navItems.map((item) => ({
-              ...item,
+            items={items.map((item) => ({
+              id: item.id,
+              icon: <item.icon />,
+              label: item.title,
               onClick: () => router.push(item.href),
             }))}
             activeIndex={activeIndex === -1 ? 0 : activeIndex}
