@@ -52,6 +52,7 @@ globs: src/app/(payload)/**,src/app/api/**,src/mastra/**,src/payload/**,src/payl
 - 每个 Agent 应有明确的 System Prompt 和职责边界。
 - 复杂的逻辑链条应拆分为 Mastra Workflow 的不同 Step。
 - 确保 AI 输出的格式化（如 JSON 模式），以便程序解析。
+- **Mastra 模块导入规范**: 在 `src/mastra` 目录下的所有代码必须使用相对路径进行导入 (例如 `../../lib/utils` 而不是 `@/lib/utils`)，以确保 mastraStudio 调试工具能正确解析 TypeScript 别名。
 
 ## 4. 代码风格
 

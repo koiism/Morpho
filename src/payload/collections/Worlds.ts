@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { derivedAttributes } from '@/payload/fields/derivedAttributes'
+import { derivedAttributes } from '../fields/derivedAttributes'
 
 export const Worlds: CollectionConfig = {
   slug: 'worlds',
@@ -18,11 +18,11 @@ export const Worlds: CollectionConfig = {
       required: true,
     },
     {
-      name: 'rules',
+      name: 'description',
       type: 'textarea',
-      label: '法则',
+      label: '描述',
       admin: {
-        description: '世界的运行法则',
+        description: '对跑团世界的描述，比如这个世界的历史、人文环境等，使用 Markdown 格式',
       },
     },
     {

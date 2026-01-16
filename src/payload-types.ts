@@ -501,9 +501,9 @@ export interface World {
   id: string;
   name: string;
   /**
-   * 世界的运行法则
+   * 对跑团世界的描述，比如这个世界的历史、人文环境等，使用 Markdown 格式
    */
-  rules?: string | null;
+  description?: string | null;
   cover?: (string | null) | Media;
   /**
    * 状态 Relationship 数组，比如 HP、MP 等
@@ -990,7 +990,7 @@ export interface MainAttributesSelect<T extends boolean = true> {
  */
 export interface WorldsSelect<T extends boolean = true> {
   name?: T;
-  rules?: T;
+  description?: T;
   cover?: T;
   statusAttributes?: T;
   mainAttributes?: T;
