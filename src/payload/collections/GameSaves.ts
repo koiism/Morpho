@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { creator } from '../fields/creator'
 
 export const GameSaves: CollectionConfig = {
   slug: 'game-saves',
@@ -89,5 +90,6 @@ export const GameSaves: CollectionConfig = {
       type: 'json',
       label: '剧本快照',
     },
+    creator(),
   ],
 }

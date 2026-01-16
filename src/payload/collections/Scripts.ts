@@ -1,9 +1,10 @@
 import type { CollectionConfig } from 'payload'
-import { acts } from '@/payload/fields/acts'
-import { actTransitions } from '@/payload/fields/actTransitions'
-import { characterRelationships } from '@/payload/fields/characterRelationships'
-import { derivedAttributes } from '@/payload/fields/derivedAttributes'
-import { npcs } from '@/payload/fields/npcs'
+import { acts } from '../fields/acts'
+import { actTransitions } from '../fields/actTransitions'
+import { characterRelationships } from '../fields/characterRelationships'
+import { derivedAttributes } from '../fields/derivedAttributes'
+import { npcs } from '../fields/npcs'
+import { creator } from '../fields/creator'
 
 export const Scripts: CollectionConfig = {
   slug: 'scripts',
@@ -69,5 +70,6 @@ export const Scripts: CollectionConfig = {
       label: '失败条件',
     },
     ...derivedAttributes(),
+    creator(),
   ],
 }

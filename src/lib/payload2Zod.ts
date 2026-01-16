@@ -23,8 +23,6 @@ function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
           })
         }
         break
-      case 'join':
-        break
       case 'group':
         if ('fields' in field && 'name' in field && field.name) {
           shape[field.name] = z.object({
@@ -34,9 +32,16 @@ function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
           shape = { ...shape, ...buildZodShape(field.fields) }
         }
         break
+      case 'join':
+        break
+      case 'ui':
+        break
       default:
         if ('name' in field && field.name) {
-          shape[field.name] = field2Zod(field)
+          const zodField = field2Zod(field)
+          if (zodField) {
+            shape[field.name] = zodField
+          }
         }
     }
   })
@@ -45,10 +50,14 @@ function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
 }
 
 type RealField = Field & {
-  type: Exclude<Field['type'], 'row' | 'collapsible' | 'tabs' | 'join' | 'group'>
+  type: Exclude<Field['type'], 'row' | 'collapsible' | 'tabs' | 'join' | 'group' | 'ui'>
 }
 
-export function field2Zod(field: RealField): z.ZodTypeAny {
+export function field2Zod(field: RealField): z.ZodTypeAny | null {
+  if (field.admin?.readOnly || field.virtual) {
+    return null
+  }
+
   let schema: z.ZodTypeAny = z.any()
   const description = (field.admin as FieldAdmin)?.description || ''
   const label = field.label || field.name

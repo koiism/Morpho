@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { derivedAttributes } from '../fields/derivedAttributes'
+import { creator } from '../fields/creator'
 
 export const Worlds: CollectionConfig = {
   slug: 'worlds',
@@ -52,5 +53,6 @@ export const Worlds: CollectionConfig = {
       },
     },
     ...derivedAttributes(),
+    creator(),
   ],
 }

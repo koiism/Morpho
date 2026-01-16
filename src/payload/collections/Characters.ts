@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { creator } from '../fields/creator'
 
 export const Characters: CollectionConfig = {
   slug: 'characters',
@@ -119,5 +120,6 @@ export const Characters: CollectionConfig = {
         },
       ],
     },
+    creator(),
   ],
 }
