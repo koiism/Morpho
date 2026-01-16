@@ -63,3 +63,10 @@ alwaysApply: true
 - **直播模式**: 观众通过打赏触发“天降宝箱”或“灾难”等实时剧情干扰。
 - **TTS**: 故事语音朗读。
 - **OC**: 原创角色深度支持。
+
+## 技术栈
+
+- **前端**: React, Next.js, TailwindCSS
+- **后端**: PayloadCMS, Elysia, Mastra
+- **数据库**: MongoDB
+- **包管理**: bun

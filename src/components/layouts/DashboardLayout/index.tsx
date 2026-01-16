@@ -7,12 +7,16 @@ import { cn } from '@/lib/utils'
 import { LimelightNav } from '@/components/ui/shadcn-io/limelight-nav'
 import { usePathname, useRouter } from '@/i18n/routing'
 import { useNavItems } from './useNavItems'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import { Menu } from 'lucide-react'
+import { UserNav } from './UserNav'
 
 interface DashboardLayoutProps {
   children: React.ReactNode
+  overviewSlot?: React.ReactNode
 }
 
-export function DashboardLayout({ children }: DashboardLayoutProps) {
+export function DashboardLayout({ children, overviewSlot }: DashboardLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -39,7 +43,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           className="h-full w-full items-stretch"
         >
           <ResizablePanel
-            defaultSize={10}
+            defaultSize={15}
             collapsedSize={4}
             collapsible={true}
             minSize={10}
@@ -56,7 +60,18 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
           <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={80} minSize={30}>
+          {overviewSlot && (
+            <>
+              <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
+                <div className="h-full w-full overflow-y-auto border-r bg-background/50 backdrop-blur-sm">
+                  {overviewSlot}
+                </div>
+              </ResizablePanel>
+              <ResizableHandle withHandle />
+            </>
+          )}
+
+          <ResizablePanel defaultSize={overviewSlot ? 65 : 85} minSize={30}>
             <div className="h-full w-full overflow-y-auto bg-background/50 backdrop-blur-sm">
               {children}
             </div>
@@ -66,6 +81,28 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Mobile Layout */}
       <div className="flex md:hidden flex-col h-full w-full">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b px-4 bg-background/50 backdrop-blur-sm">
+          {overviewSlot ? (
+            <>
+              <Sheet>
+                <SheetTrigger asChild>
+                  <button className="flex h-10 w-10 items-center justify-center rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <Menu className="h-5 w-5" />
+                    <span className="sr-only">Toggle Sidebar</span>
+                  </button>
+                </SheetTrigger>
+                <SheetContent side="left" className="p-0 w-[80%] max-w-[300px]">
+                  {overviewSlot}
+                </SheetContent>
+              </Sheet>
+            </>
+          ) : (
+            <div />
+          )}
+
+          <UserNav />
+        </header>
+
         <div className="flex-1 overflow-y-auto bg-background/50 backdrop-blur-sm">{children}</div>
         <div className="shrink-0">
           <LimelightNav

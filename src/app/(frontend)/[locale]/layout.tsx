@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { Providers } from '@/providers'
 import '../styles.css'
+import { payloadJSONSchemas } from '@/payload/plugins/zodSchema'
 
 export const metadata = {
   description: 'A blank template using Payload in a Next.js app.',
@@ -17,6 +18,7 @@ export default async function RootLayout({
 }) {
   const { locale } = await params
   const messages = await getMessages()
+  console.log(payloadJSONSchemas)
 
   return (
     <html lang={locale} suppressHydrationWarning>

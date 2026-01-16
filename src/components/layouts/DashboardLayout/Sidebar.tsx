@@ -2,9 +2,9 @@
 
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { useUserInfo } from '@/hooks/useUserInfo'
 import { Link, usePathname } from '@/i18n/routing'
 import { useNavItems } from './useNavItems'
+import { UserNav } from './UserNav'
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean
@@ -12,7 +12,6 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({ className, isCollapsed }: SidebarProps) {
   const pathname = usePathname()
-  const { user } = useUserInfo()
   const items = useNavItems()
 
   const mainNavItems = items.filter((item) => item.id !== 'settings')
@@ -75,24 +74,14 @@ export function Sidebar({ className, isCollapsed }: SidebarProps) {
             </Link>
           )}
 
-          {user && (
-            <div
-              className={cn(
-                'mt-4 flex items-center gap-3 rounded-lg border bg-card p-3 text-card-foreground shadow-sm',
-                isCollapsed && 'justify-center p-2',
-              )}
-            >
-              <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold">
-                {user.email?.[0].toUpperCase()}
-              </div>
-              {!isCollapsed && (
-                <div className="flex flex-col overflow-hidden">
-                  <span className="truncate text-xs font-medium">{user.email}</span>
-                  <span className="truncate text-[10px] text-muted-foreground">User</span>
-                </div>
-              )}
-            </div>
-          )}
+          <UserNav
+            isCollapsed={isCollapsed}
+            showDetails={true}
+            className={cn(
+              'mt-4 rounded-lg border bg-card p-3 text-card-foreground shadow-sm transition-all duration-300',
+              isCollapsed && 'justify-center p-2',
+            )}
+          />
         </div>
       </div>
     </div>
