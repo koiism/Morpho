@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { World } from '@/payload-types'
 import { cn } from '@/lib/utils'
 import { Search } from 'lucide-react'
+import { useMemo, useState } from 'react'
 
 interface WorldListProps {
   worlds: World[]
@@ -15,12 +16,10 @@ interface WorldListProps {
 }
 
 export function WorldList({ worlds, selectedWorldId, onSelectWorld }: WorldListProps) {
-  const [searchQuery, setSearchQuery] = React.useState('')
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const filteredWorlds = React.useMemo(() => {
-    return worlds.filter((world) =>
-      world.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
+  const filteredWorlds = useMemo(() => {
+    return worlds.filter((world) => world.name.toLowerCase().includes(searchQuery.toLowerCase()))
   }, [worlds, searchQuery])
 
   return (
@@ -40,29 +39,23 @@ export function WorldList({ worlds, selectedWorldId, onSelectWorld }: WorldListP
             <Card
               key={world.id}
               className={cn(
-                "cursor-pointer transition-colors hover:bg-accent/50",
-                selectedWorldId === world.id && "bg-accent border-primary"
+                'cursor-pointer transition-colors hover:bg-accent/50',
+                selectedWorldId === world.id && 'bg-accent border-primary',
               )}
               onClick={() => onSelectWorld(world)}
             >
               <CardHeader className="p-4">
-                <CardTitle className="text-base font-medium leading-none">
-                  {world.name}
-                </CardTitle>
+                <CardTitle className="text-base font-medium leading-none">{world.name}</CardTitle>
               </CardHeader>
-              {world.rules && (
+              {world.description && (
                 <CardContent className="p-4 pt-0">
-                  <p className="text-xs text-muted-foreground line-clamp-2">
-                    {world.rules}
-                  </p>
+                  <p className="text-xs text-muted-foreground line-clamp-2">{world.description}</p>
                 </CardContent>
               )}
             </Card>
           ))}
           {filteredWorlds.length === 0 && (
-            <div className="text-center text-sm text-muted-foreground py-8">
-              没有找到相关世界
-            </div>
+            <div className="text-center text-sm text-muted-foreground py-8">没有找到相关世界</div>
           )}
         </div>
       </ScrollArea>

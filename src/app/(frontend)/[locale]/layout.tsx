@@ -18,7 +18,7 @@ export default async function RootLayout({
 }) {
   const { locale } = await params
   const messages = await getMessages()
-  console.log(payloadJSONSchemas)
+  // console.log(payloadJSONSchemas)
 
   return (
     <html lang={locale} suppressHydrationWarning>

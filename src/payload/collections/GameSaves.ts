@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { creator } from '../fields/creator'
+import { commonFields } from '../fields/commonFields'
 
 export const GameSaves: CollectionConfig = {
   slug: 'game-saves',
@@ -25,6 +26,17 @@ export const GameSaves: CollectionConfig = {
     ],
   },
   fields: [
+    ...commonFields({
+      name: {
+        virtual: 'script.name',
+      },
+      cover: {
+        admin: {
+          readOnly: true,
+        },
+        virtual: 'script.cover',
+      },
+    }),
     {
       name: 'lastInteractionTime',
       type: 'date',

@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import { derivedAttributes } from '../fields/derivedAttributes'
 import { creator } from '../fields/creator'
+import { commonFields } from '../fields/commonFields'
 
 export const Worlds: CollectionConfig = {
   slug: 'worlds',
@@ -12,26 +13,13 @@ export const Worlds: CollectionConfig = {
     useAsTitle: 'name',
   },
   fields: [
-    {
-      name: 'name',
-      type: 'text',
-      label: '名称',
-      required: true,
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      label: '描述',
-      admin: {
-        description: '对跑团世界的描述，比如这个世界的历史、人文环境等，使用 Markdown 格式',
+    ...commonFields({
+      description: {
+        admin: {
+          description: '对跑团世界的描述，比如这个世界的历史、人文环境等，使用 Markdown 格式',
+        },
       },
-    },
-    {
-      name: 'cover',
-      type: 'upload',
-      relationTo: 'media',
-      label: '封面',
-    },
+    }),
     {
       name: 'statusAttributes',
       type: 'relationship',

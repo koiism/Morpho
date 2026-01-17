@@ -1,20 +1,12 @@
 'use client'
 
 import React from 'react'
-import { useUserInfo } from '@/hooks/useUserInfo'
 import { Loader2 } from 'lucide-react'
 import { DashboardWorld } from '@/components/pages/DashboardWorld'
-import { useRouter } from '@/i18n/routing'
+import { useEnsureLogin } from '@/hooks/useEnsureLogin'
 
 export default function WorldPage() {
-  const { user, loading } = useUserInfo()
-  const router = useRouter()
-
-  React.useEffect(() => {
-    if (!loading && !user) {
-      router.push('/')
-    }
-  }, [user, loading, router])
+  const { loading, user } = useEnsureLogin()
 
   if (loading) {
     return (

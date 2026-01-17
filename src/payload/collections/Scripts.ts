@@ -5,6 +5,7 @@ import { characterRelationships } from '../fields/characterRelationships'
 import { derivedAttributes } from '../fields/derivedAttributes'
 import { npcs } from '../fields/npcs'
 import { creator } from '../fields/creator'
+import { commonFields } from '../fields/commonFields'
 
 export const Scripts: CollectionConfig = {
   slug: 'scripts',
@@ -16,23 +17,7 @@ export const Scripts: CollectionConfig = {
     useAsTitle: 'name',
   },
   fields: [
-    {
-      name: 'name',
-      type: 'text',
-      label: '名称',
-      required: true,
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      label: '描述',
-    },
-    {
-      name: 'cover',
-      type: 'upload',
-      relationTo: 'media',
-      label: '封面',
-    },
+    ...commonFields(),
     {
       name: 'world',
       type: 'relationship',

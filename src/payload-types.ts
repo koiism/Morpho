@@ -81,6 +81,7 @@ export interface Config {
     scripts: Script;
     characters: Character;
     'game-saves': GameSave;
+    search: Search;
     'payload-kv': PayloadKv;
     'payload-folders': FolderInterface;
     'payload-locked-documents': PayloadLockedDocument;
@@ -107,6 +108,7 @@ export interface Config {
     scripts: ScriptsSelect<false> | ScriptsSelect<true>;
     characters: CharactersSelect<false> | CharactersSelect<true>;
     'game-saves': GameSavesSelect<false> | GameSavesSelect<true>;
+    search: SearchSelect<false> | SearchSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-folders': PayloadFoldersSelect<false> | PayloadFoldersSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -520,6 +522,7 @@ export interface World {
         id?: string | null;
       }[]
     | null;
+  creator?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -611,6 +614,7 @@ export interface Script {
         id?: string | null;
       }[]
     | null;
+  creator?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -621,12 +625,13 @@ export interface Script {
 export interface Character {
   id: string;
   name: string;
-  gender: string;
-  species: string;
   /**
    * 人设、背景故事等
    */
   description?: string | null;
+  cover?: (string | null) | Media;
+  gender: string;
+  species: string;
   mainAttributes?:
     | {
         attribute: string | MainAttribute;
@@ -661,6 +666,7 @@ export interface Character {
         id?: string | null;
       }[]
     | null;
+  creator?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -670,6 +676,9 @@ export interface Character {
  */
 export interface GameSave {
   id: string;
+  name: string;
+  description?: string | null;
+  cover?: (string | null) | Media;
   /**
    * 每次更新存档时自动更新
    */
@@ -710,6 +719,41 @@ export interface GameSave {
     | number
     | boolean
     | null;
+  creator?: (string | null) | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This is a collection of automatically created search results. These results are used by the global site search and will be updated automatically as documents in the CMS are created or updated.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "search".
+ */
+export interface Search {
+  id: string;
+  title?: string | null;
+  priority?: number | null;
+  doc:
+    | {
+        relationTo: 'worlds';
+        value: string | World;
+      }
+    | {
+        relationTo: 'scripts';
+        value: string | Script;
+      }
+    | {
+        relationTo: 'characters';
+        value: string | Character;
+      }
+    | {
+        relationTo: 'game-saves';
+        value: string | GameSave;
+      };
+  name?: string | null;
+  description?: string | null;
+  cover?: (string | null) | Media;
+  creator?: (string | null) | User;
   updatedAt: string;
   createdAt: string;
 }
@@ -792,6 +836,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'game-saves';
         value: string | GameSave;
+      } | null)
+    | ({
+        relationTo: 'search';
+        value: string | Search;
       } | null)
     | ({
         relationTo: 'payload-folders';
@@ -1001,6 +1049,7 @@ export interface WorldsSelect<T extends boolean = true> {
         name?: T;
         id?: T;
       };
+  creator?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1064,6 +1113,7 @@ export interface ScriptsSelect<T extends boolean = true> {
         name?: T;
         id?: T;
       };
+  creator?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1073,9 +1123,10 @@ export interface ScriptsSelect<T extends boolean = true> {
  */
 export interface CharactersSelect<T extends boolean = true> {
   name?: T;
+  description?: T;
+  cover?: T;
   gender?: T;
   species?: T;
-  description?: T;
   mainAttributes?:
     | T
     | {
@@ -1104,6 +1155,7 @@ export interface CharactersSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  creator?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1112,6 +1164,9 @@ export interface CharactersSelect<T extends boolean = true> {
  * via the `definition` "game-saves_select".
  */
 export interface GameSavesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  cover?: T;
   lastInteractionTime?: T;
   script?: T;
   isGameOver?: T;
@@ -1130,6 +1185,22 @@ export interface GameSavesSelect<T extends boolean = true> {
         id?: T;
       };
   scriptSnapshot?: T;
+  creator?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "search_select".
+ */
+export interface SearchSelect<T extends boolean = true> {
+  title?: T;
+  priority?: T;
+  doc?: T;
+  name?: T;
+  description?: T;
+  cover?: T;
+  creator?: T;
   updatedAt?: T;
   createdAt?: T;
 }

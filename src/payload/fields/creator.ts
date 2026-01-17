@@ -16,10 +16,7 @@ export function creator({ override }: { override?: Partial<Field> } = {}): Field
       beforeChange: [
         async ({ req, value }) => {
           if (!value && req.user) {
-            return {
-              relationTo: req.user.collection,
-              value: req.user.id,
-            }
+            return req.user.id
           }
           return value
         },

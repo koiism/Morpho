@@ -1,5 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { creator } from '../fields/creator'
+import { commonFields } from '../fields/commonFields'
 
 export const Characters: CollectionConfig = {
   slug: 'characters',
@@ -11,13 +12,16 @@ export const Characters: CollectionConfig = {
     useAsTitle: 'name',
   },
   fields: [
-    {
-      name: 'name',
-      type: 'text',
-      label: '姓名',
-      required: true,
-      localized: true,
-    },
+    ...commonFields({
+      name: {
+        label: '姓名',
+      },
+      description: {
+        admin: {
+          description: '人设、背景故事等',
+        },
+      },
+    }),
     {
       name: 'gender',
       type: 'text',
@@ -29,15 +33,6 @@ export const Characters: CollectionConfig = {
       type: 'text',
       label: '物种',
       required: true,
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      label: '描述',
-      admin: {
-        description: '人设、背景故事等',
-      },
-      localized: true,
     },
     {
       name: 'mainAttributes',
