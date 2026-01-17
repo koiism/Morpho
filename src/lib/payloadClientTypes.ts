@@ -37,9 +37,8 @@ type WhereField = {
 
 type Where = {
   [key: string]: Where[] | WhereField
-  // @ts-expect-error idk, the same as in Payload
+} & {
   and?: Where[]
-  // @ts-expect-error idk, the same as in Payload
   or?: Where[]
 }
 

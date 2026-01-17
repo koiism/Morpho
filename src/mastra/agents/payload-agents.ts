@@ -1,12 +1,11 @@
 import { Agent } from '@mastra/core/agent'
-import { Memory } from '@mastra/memory'
-import { LibSQLStore } from '@mastra/libsql'
 import { MainAttributes } from '../../payload/collections/MainAttributes'
 import { StatusAttributes } from '../../payload/collections/StatusAttributes'
 import { Worlds } from '../../payload/collections/Worlds'
-import { CollectionAgentConfig, createCollectionAgent } from '../utils/create-collection-agent'
+import { LibSQLStore } from '@mastra/libsql'
+import { Memory } from '@mastra/memory'
 
-const agentsConfig: CollectionAgentConfig[] = [
+const agentsConfig = [
   {
     collectionSlug: 'main-attributes',
     collectionConfig: MainAttributes,
@@ -58,24 +57,15 @@ const agentsConfig: CollectionAgentConfig[] = [
   },
 ]
 
-export const payloadAgents: Record<string, Agent> = {}
+console.log(agentsConfig)
 
-for (const config of agentsConfig) {
-  const agent = createCollectionAgent(config)
-  payloadAgents[config.collectionSlug] = agent
-}
-
-export const payloadRouterAgent = new Agent({
-  name: 'Payload 数据管理智能体',
-  instructions: `你是一个数据管理智能体，负责将用户的请求分发给最合适的子代理。
-
-请分析用户的意图，如果涉及特定内容的增删改查，请调用相应的子代理。
-如果请求不明确，请询问更多细节。`,
+export const worldsAgent = new Agent({
+  name: agentsConfig[2].agentName,
+  instructions: agentsConfig[2].agentInstructions,
   model: 'modelscope/Qwen/Qwen3-Coder-30B-A3B-Instruct',
   memory: new Memory({
     storage: new LibSQLStore({
       url: 'file:../mastra.db',
     }),
   }),
-  agents: payloadAgents,
 })

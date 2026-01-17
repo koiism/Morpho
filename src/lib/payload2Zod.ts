@@ -2,8 +2,20 @@ import type { FieldAdmin } from 'node_modules/payload/dist/fields/config/types'
 import type { CollectionConfig, Field } from 'payload'
 import { z } from 'zod'
 
+export interface GenerateZodOptions {
+  /**
+   * 'create': for input validation (excludes readOnly, virtual, system fields)
+   * 'read': for output validation (includes readOnly, virtual, system fields)
+   * @default 'create'
+   */
+  mode?: 'create' | 'read'
+}
+
 // Helper to flatten fields from rows, collapsibles, etc.
-function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
+function buildZodShape(
+  fields: Field[],
+  options: GenerateZodOptions = {},
+): Record<string, z.ZodTypeAny> {
   let shape: Record<string, z.ZodTypeAny> = {}
 
   fields.forEach((field) => {
@@ -11,14 +23,14 @@ function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
       case 'row':
       case 'collapsible':
         if ('fields' in field) {
-          shape = { ...shape, ...buildZodShape(field.fields) }
+          shape = { ...shape, ...buildZodShape(field.fields, options) }
         }
         break
       case 'tabs':
         if ('tabs' in field) {
           field.tabs.forEach((tab) => {
             if ('fields' in tab) {
-              shape = { ...shape, ...buildZodShape(tab.fields) }
+              shape = { ...shape, ...buildZodShape(tab.fields, options) }
             }
           })
         }
@@ -26,10 +38,10 @@ function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
       case 'group':
         if ('fields' in field && 'name' in field && field.name) {
           shape[field.name] = z.object({
-            ...buildZodShape(field.fields),
+            ...buildZodShape(field.fields, options),
           })
         } else {
-          shape = { ...shape, ...buildZodShape(field.fields) }
+          shape = { ...shape, ...buildZodShape(field.fields, options) }
         }
         break
       case 'join':
@@ -38,7 +50,7 @@ function buildZodShape(fields: Field[]): Record<string, z.ZodTypeAny> {
         break
       default:
         if ('name' in field && field.name) {
-          const zodField = field2Zod(field)
+          const zodField = field2Zod(field, options)
           if (zodField) {
             shape[field.name] = zodField
           }
@@ -53,8 +65,10 @@ type RealField = Field & {
   type: Exclude<Field['type'], 'row' | 'collapsible' | 'tabs' | 'join' | 'group' | 'ui'>
 }
 
-export function field2Zod(field: RealField): z.ZodTypeAny | null {
-  if (field.admin?.readOnly || field.virtual) {
+export function field2Zod(field: RealField, options: GenerateZodOptions = {}): z.ZodTypeAny | null {
+  const { mode = 'create' } = options
+
+  if (mode === 'create' && (field.admin?.readOnly || field.virtual)) {
     return null
   }
 
@@ -110,7 +124,12 @@ export function field2Zod(field: RealField): z.ZodTypeAny | null {
         // Polymorphic: { relationTo: 'collection', value: 'id' }
         const polymorphicSchema = z.object({
           relationTo: z.enum(relationTo as [string, ...string[]]).describe('关联集合的 slug'),
-          value: z.string().describe('关联数据的 ID'),
+          value:
+            mode === 'read'
+              ? z
+                  .union([z.string(), z.record(z.string(), z.unknown())])
+                  .describe('关联数据的 ID 或 对象')
+              : z.string().describe('关联数据的 ID'),
         })
 
         if (hasMany) {
@@ -120,12 +139,22 @@ export function field2Zod(field: RealField): z.ZodTypeAny | null {
         }
       } else {
         // Single: ID string
+        let relationSchema: z.ZodTypeAny = z.string().describe('关联数据的 ID')
+
+        if (mode === 'read') {
+          // In read mode, relationship can be populated (object) or ID (string)
+          relationSchema = z.union([
+            z.string().describe('关联数据的 ID'),
+            z.record(z.string(), z.unknown()).describe('关联数据的完整对象'),
+          ])
+        }
+
         if (hasMany) {
-          schema = z.array(z.string().describe('关联数据的 ID'))
-          desc = `${label}(${relationTo})关联数据的 ID 数组${description ? ' - ' : ''}${description}`
+          schema = z.array(relationSchema)
+          desc = `${label}(${relationTo})关联数据的 ${mode === 'read' ? 'ID 或 对象' : 'ID'} 数组${description ? ' - ' : ''}${description}`
         } else {
-          schema = z.string()
-          desc = `${label}(${relationTo})关联数据的 ID${description ? ' - ' : ''}${description}`
+          schema = relationSchema
+          desc = `${label}(${relationTo})关联数据的 ${mode === 'read' ? 'ID 或 对象' : 'ID'}${description ? ' - ' : ''}${description}`
         }
       }
       break
@@ -133,7 +162,7 @@ export function field2Zod(field: RealField): z.ZodTypeAny | null {
 
     case 'array':
       if ('fields' in field && field.fields) {
-        schema = z.array(z.object(buildZodShape(field.fields)))
+        schema = z.array(z.object(buildZodShape(field.fields, options)))
       } else {
         schema = z.array(z.any())
       }
@@ -164,6 +193,24 @@ export function field2Zod(field: RealField): z.ZodTypeAny | null {
   return schema.optional()
 }
 
-export function collection2Zod(collection: CollectionConfig) {
-  return z.object(buildZodShape(collection.fields))
+export function collection2Zod(collection: CollectionConfig, options: GenerateZodOptions = {}) {
+  const shape = buildZodShape(collection.fields, options)
+  const { mode = 'create' } = options
+
+  if (mode === 'read') {
+    shape.id = z.string()
+    shape.createdAt = z.string()
+    shape.updatedAt = z.string()
+
+    if (collection.upload) {
+      shape.url = z.string().optional()
+      shape.filename = z.string().optional()
+      shape.mimeType = z.string().optional()
+      shape.filesize = z.number().optional()
+      shape.width = z.number().optional()
+      shape.height = z.number().optional()
+    }
+  }
+
+  return z.object(shape)
 }

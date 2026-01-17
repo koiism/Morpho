@@ -2,7 +2,6 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { Providers } from '@/providers'
 import '../styles.css'
-import { payloadJSONSchemas } from '@/payload/plugins/zodSchema'
 
 export const metadata = {
   description: 'A blank template using Payload in a Next.js app.',

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { World } from '@/payload-types'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { CalendarIcon, Globe } from 'lucide-react'
@@ -43,7 +43,7 @@ export function WorldDetail({ world }: WorldDetailProps) {
         </div>
         <Separator />
       </div>
-      
+
       <ScrollArea className="flex-1 p-6">
         <div className="space-y-6 max-w-4xl">
           {/* 世界法则 */}
@@ -52,7 +52,7 @@ export function WorldDetail({ world }: WorldDetailProps) {
             <Card>
               <CardContent className="pt-6">
                 <p className="leading-relaxed whitespace-pre-wrap text-muted-foreground">
-                  {world.rules || '暂无详细法则描述。'}
+                  {world.description || '暂无详细法则描述。'}
                 </p>
               </CardContent>
             </Card>
@@ -64,7 +64,7 @@ export function WorldDetail({ world }: WorldDetailProps) {
               <h2 className="text-xl font-semibold">主属性体系</h2>
               <div className="flex flex-wrap gap-2">
                 {world.mainAttributes?.map((attr, index) => {
-                  const attrName = typeof attr === 'string' ? attr : attr.name;
+                  const attrName = typeof attr === 'string' ? attr : attr.name
                   return (
                     <Badge key={index} variant="secondary" className="px-3 py-1 text-sm">
                       {attrName}
@@ -80,7 +80,7 @@ export function WorldDetail({ world }: WorldDetailProps) {
               <h2 className="text-xl font-semibold">状态属性</h2>
               <div className="flex flex-wrap gap-2">
                 {world.statusAttributes?.map((attr, index) => {
-                  const attrName = typeof attr === 'string' ? attr : attr.name;
+                  const attrName = typeof attr === 'string' ? attr : attr.name
                   return (
                     <Badge key={index} variant="outline" className="px-3 py-1 text-sm">
                       {attrName}
