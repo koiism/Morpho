@@ -35,7 +35,7 @@ export function OverviewPanel<T>({ config }: OverviewPanelProps<T>) {
           className="pl-8"
         />
       </div>
-      <ScrollArea className="flex-1 -mx-4 px-4">
+      <ScrollArea className="flex-1 -mx-4 px-4 min-h-0">
         <div className="flex flex-col gap-2 pb-4">
           {loading ? (
             <div className="flex justify-center py-8">
