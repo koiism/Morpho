@@ -78,6 +78,105 @@ const app = new Elysia({ prefix: '/api/payload' })
       query: PayloadModel.findQuery,
     },
   )
+  // 搜索
+  .get(
+    '/search/:slugs',
+    async ({ params: { slugs }, query, getPayload, getSession, request }) => {
+      const { user } = await getSession({ request })
+      const payload = await getPayload()
+      const limit = query.limit ? query.limit : 10
+      const page = query.page ? query.page : 1
+      const depth = query?.depth ? query.depth : undefined
+      return await payload.find({
+        collection: 'search',
+        limit,
+        page,
+        sort: query?.sort,
+        depth,
+        overrideAccess: false,
+        user,
+        where: {
+          and: [
+            {
+              'doc.relationTo': {
+                equals: slugs,
+              },
+            },
+            {
+              or: [
+                {
+                  name: {
+                    like: query?.query,
+                  },
+                },
+                {
+                  description: {
+                    like: query?.query,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      })
+    },
+    {
+      params: PayloadModel.findParams,
+      query: PayloadModel.searchQuery,
+    },
+  )
+
+  .get(
+    '/search/my/:slugs',
+    async ({ params: { slugs }, query, getPayload, getSession, request }) => {
+      const { user } = await getSession({ request })
+      const payload = await getPayload()
+      const limit = query.limit ? query.limit : 10
+      const page = query.page ? query.page : 1
+      const depth = query?.depth ? query.depth : undefined
+      return await payload.find({
+        collection: 'search',
+        limit,
+        page,
+        sort: query?.sort,
+        depth,
+        overrideAccess: false,
+        user,
+        where: {
+          and: [
+            {
+              'doc.relationTo': {
+                equals: slugs,
+              },
+            },
+            {
+              or: [
+                {
+                  name: {
+                    like: query?.query,
+                  },
+                },
+                {
+                  description: {
+                    like: query?.query,
+                  },
+                },
+              ],
+            },
+            {
+              creator: {
+                equals: user?.id,
+              },
+            },
+          ],
+        },
+      })
+    },
+    {
+      params: PayloadModel.findParams,
+      query: PayloadModel.searchQuery,
+    },
+  )
 
 export type APP = typeof app
 

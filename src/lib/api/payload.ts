@@ -12,6 +12,12 @@ export const payloadGet = (slug: CollectionSlug) =>
 export const payloadGetMy = (slug: CollectionSlug) =>
   treaty<APP>(getServerSideURL()).api.payload.my({ slugs: slug })
 
+export const payloadSearch = (slug: CollectionSlug) =>
+  treaty<APP>(getServerSideURL()).api.payload.search({ slugs: slug })
+
+export const payloadSearchMy = (slug: CollectionSlug) =>
+  treaty<APP>(getServerSideURL()).api.payload.search.my({ slugs: slug })
+
 type CollectionKey = keyof Config['collections']
 type Collection<T extends CollectionKey> = Config['collections'][T]
 
@@ -51,6 +57,30 @@ export const getCollectionApi = <T extends CollectionKey>(slug: T) => {
         error: typeof error
       }
     },
+    getSearchList: async (query: FindQuery & { query?: string }) => {
+      const { data, error } = await payloadSearch(slug).get({
+        query,
+      })
+      return {
+        data,
+        error,
+      } as {
+        data: PaginatedDocs<Collection<T>>
+        error: typeof error
+      }
+    },
+    getMySearchList: async (query: FindQuery & { query?: string }) => {
+      const { data, error } = await payloadSearchMy(slug).get({
+        query,
+      })
+      return {
+        data,
+        error,
+      } as {
+        data: PaginatedDocs<Collection<T>>
+        error: typeof error
+      }
+    },
   }
 }
 
@@ -58,6 +88,8 @@ export const {
   getList: getWorldList,
   getMyList: getMyWorldList,
   getById: getWorldById,
+  getSearchList: getWorldSearchList,
+  getMySearchList: getMyWorldSearchList,
 } = getCollectionApi('worlds')
 
 export const {

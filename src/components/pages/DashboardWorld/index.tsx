@@ -5,7 +5,7 @@ import { DashboardLayout } from '@/components/layouts/DashboardLayout'
 import { WorldListItem } from './WorldList'
 import { WorldDetail } from './WorldDetail'
 import { World } from '@/payload-types'
-import { getMyWorldList } from '@/lib/api/payload'
+import { getMyWorldList, getMyWorldSearchList } from '@/lib/api/payload'
 import { useTranslations } from 'next-intl'
 
 export function DashboardWorld() {
@@ -14,9 +14,10 @@ export function DashboardWorld() {
 
   const fetcher = React.useCallback(
     async ({ page, limit, query }: { page: number; limit: number; query?: string }) => {
-      return getMyWorldList({
+      return getMyWorldSearchList({
         page,
         limit,
+        query,
       })
     },
     [],

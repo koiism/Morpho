@@ -10,4 +10,9 @@ export const PayloadModel = {
   findParams: z.object({
     slugs: z.enum(collectionSlugs),
   }),
+
+  searchQuery: z.object({
+    query: z.string().optional(),
+    ...findSchema.shape,
+  }),
 }

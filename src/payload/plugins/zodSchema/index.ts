@@ -29,7 +29,15 @@ export const findSchema = z.object({
 
 export type FindQuery = z.infer<typeof findSchema>
 
-export const collectionSlugs: CollectionSlug[] = ['worlds'] as const
+export const collectionSlugs: CollectionSlug[] = [
+  'worlds',
+  'characters',
+  'game-saves',
+  'main-attributes',
+  'scripts',
+  'search',
+  'status-attributes',
+] as const
 
 export const payloadSchemas: {
   create: {
