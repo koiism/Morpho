@@ -1,16 +1,16 @@
 import { Mastra } from '@mastra/core/mastra'
 import { PinoLogger } from '@mastra/loggers'
-import { LibSQLStore } from '@mastra/libsql'
 import { worldsAgent } from './agents/payload-agents'
+import { MongoDBStore } from '@mastra/mongodb'
 
 export const mastra = new Mastra({
   workflows: {},
   agents: {
     default: worldsAgent,
   },
-  storage: new LibSQLStore({
-    // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
-    url: ':memory:',
+  storage: new MongoDBStore({
+    url: process.env.MONGODB_URI!,
+    dbName: process.env.MONGODB_DB_NAME!,
   }),
   logger: new PinoLogger({
     name: 'Mastra',

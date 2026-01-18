@@ -2,7 +2,7 @@ import { Agent } from '@mastra/core/agent'
 import { MainAttributes } from '../../payload/collections/MainAttributes'
 import { StatusAttributes } from '../../payload/collections/StatusAttributes'
 import { Worlds } from '../../payload/collections/Worlds'
-import { LibSQLStore } from '@mastra/libsql'
+import { MongoDBStore } from '@mastra/mongodb'
 import { Memory } from '@mastra/memory'
 
 const agentsConfig = [
@@ -64,8 +64,9 @@ export const worldsAgent = new Agent({
   instructions: agentsConfig[2].agentInstructions,
   model: 'modelscope/Qwen/Qwen3-Coder-30B-A3B-Instruct',
   memory: new Memory({
-    storage: new LibSQLStore({
-      url: 'file:../mastra.db',
+    storage: new MongoDBStore({
+      url: process.env.MONGODB_URI!,
+      dbName: process.env.MONGODB_DB_NAME!,
     }),
   }),
 })
