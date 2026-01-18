@@ -2,11 +2,11 @@
 
 import * as React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { World } from '@/payload-types'
+import { Search } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
 interface WorldListItemProps {
-  world: World
+  world: Search
   isSelected: boolean
   onClick: () => void
 }

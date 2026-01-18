@@ -5,20 +5,46 @@ import { World } from '@/payload-types'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { CalendarIcon, Globe } from 'lucide-react'
+import { CalendarIcon, Globe, Loader2 } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { useTranslations } from 'next-intl'
 import { FluentEmoji } from '@lobehub/fluent-emoji'
 import { Markdown } from '@/components/ui/markdown'
+import { getWorldById } from '@/lib/api/payload'
 
 interface WorldDetailProps {
-  world: World | null
+  worldId: string | null
 }
 
-export function WorldDetail({ world }: WorldDetailProps) {
+export function WorldDetail({ worldId }: WorldDetailProps) {
   const t = useTranslations('WorldDetail')
+  const [world, setWorld] = React.useState<World | null>(null)
+  const [loading, setLoading] = React.useState(false)
 
-  if (!world) {
+  React.useEffect(() => {
+    if (!worldId) {
+      setWorld(null)
+      return
+    }
+
+    const fetchWorld = async () => {
+      setLoading(true)
+      try {
+        const { data } = await getWorldById(worldId)
+        if (data) {
+          setWorld(data)
+        }
+      } catch (error) {
+        console.error('Error fetching world:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchWorld()
+  }, [worldId])
+
+  if (!worldId) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
         <div className="text-center space-y-2">
@@ -27,6 +53,18 @@ export function WorldDetail({ world }: WorldDetailProps) {
         </div>
       </div>
     )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    )
+  }
+
+  if (!world) {
+    return null
   }
 
   return (

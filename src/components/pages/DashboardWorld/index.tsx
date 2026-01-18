@@ -4,12 +4,12 @@ import * as React from 'react'
 import { DashboardLayout } from '@/components/layouts/DashboardLayout'
 import { WorldListItem } from './WorldList'
 import { WorldDetail } from './WorldDetail'
-import { World } from '@/payload-types'
-import { getMyWorldList, getMyWorldSearchList } from '@/lib/api/payload'
+import { Search } from '@/payload-types'
+import { getMyWorldSearchList } from '@/lib/api/payload'
 import { useTranslations } from 'next-intl'
 
 export function DashboardWorld() {
-  const [selectedWorld, setSelectedWorld] = React.useState<World | null>(null)
+  const [selectedWorld, setSelectedWorld] = React.useState<Search | null>(null)
   const t = useTranslations('WorldList')
 
   const fetcher = React.useCallback(
@@ -28,7 +28,7 @@ export function DashboardWorld() {
       enableOverviewPanel={true}
       overviewConfig={{
         fetcher,
-        renderItem: (world: World) => (
+        renderItem: (world: Search) => (
           <WorldListItem
             world={world}
             isSelected={selectedWorld?.id === world.id}
@@ -42,7 +42,7 @@ export function DashboardWorld() {
         nextPageText: t('nextPage'),
       }}
     >
-      <WorldDetail world={selectedWorld} />
+      <WorldDetail worldId={(selectedWorld?.doc.value as string) || null} />
     </DashboardLayout>
   )
 }
