@@ -35,6 +35,7 @@
     "@elysiajs/eden": "^1.4.6",
     "@elysiajs/openapi": "^1.4.13",
     "@elysiajs/server-timing": "^1.4.0",
+    "@lobehub/fluent-emoji": "^4.1.0",
     "@mastra/ai-sdk": "^0.3.3",
     "@mastra/client-js": "^0.17.2",
     "@mastra/core": "^0.24.9",

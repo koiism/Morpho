@@ -7,18 +7,23 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { CalendarIcon, Globe } from 'lucide-react'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { useTranslations } from 'next-intl'
+import { FluentEmoji } from '@lobehub/fluent-emoji'
+import { Markdown } from '@/components/ui/markdown'
 
 interface WorldDetailProps {
   world: World | null
 }
 
 export function WorldDetail({ world }: WorldDetailProps) {
+  const t = useTranslations('WorldDetail')
+
   if (!world) {
     return (
       <div className="flex h-full items-center justify-center text-muted-foreground">
         <div className="text-center space-y-2">
           <Globe className="h-12 w-12 mx-auto opacity-20" />
-          <p>请选择一个世界以查看详情</p>
+          <p>{t('selectPrompt')}</p>
         </div>
       </div>
     )
@@ -32,11 +37,15 @@ export function WorldDetail({ world }: WorldDetailProps) {
           <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
             <div className="flex items-center gap-1">
               <CalendarIcon className="h-4 w-4" />
-              <span>创建于 {new Date(world.createdAt).toLocaleDateString()}</span>
+              <span>
+                {t('createdOn', { date: new Date(world.createdAt).toLocaleDateString() })}
+              </span>
             </div>
             {world.updatedAt && (
               <div className="flex items-center gap-1">
-                <span>更新于 {new Date(world.updatedAt).toLocaleDateString()}</span>
+                <span>
+                  {t('updatedOn', { date: new Date(world.updatedAt).toLocaleDateString() })}
+                </span>
               </div>
             )}
           </div>
@@ -45,28 +54,18 @@ export function WorldDetail({ world }: WorldDetailProps) {
       </div>
 
       <ScrollArea className="flex-1 p-6">
-        <div className="space-y-6 max-w-4xl">
-          {/* 世界法则 */}
-          <section className="space-y-3">
-            <h2 className="text-xl font-semibold">世界法则</h2>
-            <Card>
-              <CardContent className="pt-6">
-                <p className="leading-relaxed whitespace-pre-wrap text-muted-foreground">
-                  {world.description || '暂无详细法则描述。'}
-                </p>
-              </CardContent>
-            </Card>
-          </section>
-
+        <div className="space-y-6 max-w-4xl min-w-full">
           {/* 属性体系 - 如果有的话 */}
           {(world.mainAttributes?.length || 0) > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xl font-semibold">主属性体系</h2>
+              <h2 className="text-xl font-semibold">{t('mainAttributes')}</h2>
               <div className="flex flex-wrap gap-2">
                 {world.mainAttributes?.map((attr, index) => {
                   const attrName = typeof attr === 'string' ? attr : attr.name
+                  const emoji = typeof attr === 'string' ? '' : attr.emoji
                   return (
                     <Badge key={index} variant="secondary" className="px-3 py-1 text-sm">
+                      {emoji && <FluentEmoji emoji={emoji} type="anim" size={18} />}
                       {attrName}
                     </Badge>
                   )
@@ -77,12 +76,14 @@ export function WorldDetail({ world }: WorldDetailProps) {
 
           {(world.statusAttributes?.length || 0) > 0 && (
             <section className="space-y-3">
-              <h2 className="text-xl font-semibold">状态属性</h2>
+              <h2 className="text-xl font-semibold">{t('statusAttributes')}</h2>
               <div className="flex flex-wrap gap-2">
                 {world.statusAttributes?.map((attr, index) => {
                   const attrName = typeof attr === 'string' ? attr : attr.name
+                  const emoji = typeof attr === 'string' ? '' : attr.emoji
                   return (
                     <Badge key={index} variant="outline" className="px-3 py-1 text-sm">
+                      {emoji && <FluentEmoji emoji={emoji} type="anim" size={18} />}
                       {attrName}
                     </Badge>
                   )
@@ -90,6 +91,22 @@ export function WorldDetail({ world }: WorldDetailProps) {
               </div>
             </section>
           )}
+
+          {/* 世界法则 */}
+          <section className="space-y-3">
+            <h2 className="text-xl font-semibold">{t('rules')}</h2>
+            <Card>
+              <CardContent className="pt-6">
+                {world.description ? (
+                  <Markdown content={world.description} className="leading-relaxed" />
+                ) : (
+                  <p className="leading-relaxed whitespace-pre-wrap text-muted-foreground">
+                    {t('noRules')}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </section>
         </div>
       </ScrollArea>
     </div>

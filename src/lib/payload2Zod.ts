@@ -3,15 +3,9 @@ import type { CollectionConfig, Field } from 'payload'
 import { z } from 'zod'
 
 export interface GenerateZodOptions {
-  /**
-   * 'create': for input validation (excludes readOnly, virtual, system fields)
-   * 'read': for output validation (includes readOnly, virtual, system fields)
-   * @default 'create'
-   */
   mode?: 'create' | 'read'
 }
 
-// Helper to flatten fields from rows, collapsibles, etc.
 function buildZodShape(
   fields: Field[],
   options: GenerateZodOptions = {},

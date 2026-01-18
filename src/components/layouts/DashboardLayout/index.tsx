@@ -10,13 +10,21 @@ import { useNavItems } from './useNavItems'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Menu } from 'lucide-react'
 import { UserNav } from './UserNav'
+import { OverviewPanel, SearchListConfig } from './OverviewPanel'
 
-interface DashboardLayoutProps {
+export type { SearchListConfig }
+
+interface DashboardLayoutProps<T = any> {
   children: React.ReactNode
-  overviewSlot?: React.ReactNode
+  enableOverviewPanel?: boolean
+  overviewConfig?: SearchListConfig<T>
 }
 
-export function DashboardLayout({ children, overviewSlot }: DashboardLayoutProps) {
+export function DashboardLayout({
+  children,
+  enableOverviewPanel = false,
+  overviewConfig,
+}: DashboardLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -26,6 +34,8 @@ export function DashboardLayout({ children, overviewSlot }: DashboardLayoutProps
     if (item.href === '/') return pathname === '/'
     return pathname?.startsWith(item.href)
   })
+
+  const showOverview = enableOverviewPanel && !!overviewConfig
 
   return (
     <div className="h-screen w-full bg-background overflow-hidden">
@@ -60,18 +70,18 @@ export function DashboardLayout({ children, overviewSlot }: DashboardLayoutProps
 
           <ResizableHandle withHandle />
 
-          {overviewSlot && (
+          {showOverview && (
             <>
               <ResizablePanel defaultSize={20} minSize={15} maxSize={30}>
                 <div className="h-full w-full overflow-y-auto border-r bg-background/50 backdrop-blur-sm">
-                  {overviewSlot}
+                  <OverviewPanel config={overviewConfig!} />
                 </div>
               </ResizablePanel>
               <ResizableHandle withHandle />
             </>
           )}
 
-          <ResizablePanel defaultSize={overviewSlot ? 65 : 85} minSize={30}>
+          <ResizablePanel defaultSize={showOverview ? 65 : 85} minSize={30}>
             <div className="h-full w-full overflow-y-auto bg-background/50 backdrop-blur-sm">
               {children}
             </div>
@@ -82,7 +92,7 @@ export function DashboardLayout({ children, overviewSlot }: DashboardLayoutProps
       {/* Mobile Layout */}
       <div className="flex md:hidden flex-col h-full w-full">
         <header className="flex h-14 shrink-0 items-center justify-between border-b px-4 bg-background/50 backdrop-blur-sm">
-          {overviewSlot ? (
+          {showOverview ? (
             <>
               <Sheet>
                 <SheetTrigger asChild>
@@ -92,7 +102,7 @@ export function DashboardLayout({ children, overviewSlot }: DashboardLayoutProps
                   </button>
                 </SheetTrigger>
                 <SheetContent side="left" className="p-0 w-[80%] max-w-[300px]">
-                  {overviewSlot}
+                  <OverviewPanel config={overviewConfig!} />
                 </SheetContent>
               </Sheet>
             </>

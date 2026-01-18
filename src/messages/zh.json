@@ -72,5 +72,21 @@
         "edit": "编辑"
       }
     }
+  },
+  "WorldDetail": {
+    "selectPrompt": "请选择一个世界以查看详情",
+    "createdOn": "创建于 {date}",
+    "updatedOn": "更新于 {date}",
+    "rules": "世界法则",
+    "noRules": "暂无详细法则描述。",
+    "mainAttributes": "主属性体系",
+    "statusAttributes": "状态属性"
+  },
+  "WorldList": {
+    "searchPlaceholder": "搜索世界...",
+    "noResults": "没有找到相关世界",
+    "prevPage": "上一页",
+    "nextPage": "下一页",
+    "pageInfo": "第 {current} 页 / 共 {total} 页"
   }
 }

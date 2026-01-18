@@ -72,5 +72,21 @@
         "edit": "Edit"
       }
     }
+  },
+  "WorldDetail": {
+    "selectPrompt": "Select a world to view details",
+    "createdOn": "Created on {date}",
+    "updatedOn": "Updated on {date}",
+    "rules": "World Rules",
+    "noRules": "No detailed rules description available.",
+    "mainAttributes": "Main Attributes",
+    "statusAttributes": "Status Attributes"
+  },
+  "WorldList": {
+    "searchPlaceholder": "Search worlds...",
+    "noResults": "No related worlds found",
+    "prevPage": "Previous",
+    "nextPage": "Next",
+    "pageInfo": "Page {current} of {total}"
   }
 }

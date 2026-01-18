@@ -11,14 +11,14 @@ const app = new Elysia({ prefix: '/api/payload' })
   // 查找记录
   .get(
     '/:slugs',
-    async ({ query, getPayload, getSession, request }) => {
+    async ({ params: { slugs }, query, getPayload, getSession, request }) => {
       const { user } = await getSession({ request })
       const payload = await getPayload()
       const limit = query.limit ? query.limit : 10
       const page = query.page ? query.page : 1
       const depth = query?.depth ? query.depth : undefined
       return await payload.find({
-        collection: 'worlds',
+        collection: slugs,
         limit,
         page,
         sort: query?.sort,

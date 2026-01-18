@@ -27,6 +27,8 @@ export const findSchema = z.object({
     .describe('查询深度'),
 })
 
+export type FindQuery = z.infer<typeof findSchema>
+
 export const collectionSlugs: CollectionSlug[] = ['worlds'] as const
 
 export const payloadSchemas: {
