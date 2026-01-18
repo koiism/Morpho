@@ -9,12 +9,13 @@ import { en } from 'payload/i18n/en'
 import { zh } from 'payload/i18n/zh'
 import { plugins } from './payload/plugins'
 import { collections } from './payload/collections'
+import { getServerSideURL } from './lib/getURL'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || '',
+  serverURL: getServerSideURL(),
   admin: {
     user: 'users',
     importMap: {

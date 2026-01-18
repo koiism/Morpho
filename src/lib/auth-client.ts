@@ -1,8 +1,9 @@
 import { twoFactorClient } from 'better-auth/plugins'
 import { createAuthClient } from 'better-auth/react'
+import { getServerSideURL } from './getURL'
 
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL || 'http://localhost:3000',
+  baseURL: getServerSideURL(),
   plugins: [twoFactorClient()],
 })
 

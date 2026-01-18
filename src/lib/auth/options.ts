@@ -1,10 +1,11 @@
-import type { BetterAuthOptions, BetterAuthPluginOptions } from 'payload-auth/better-auth'
+import type { BetterAuthOptions, PayloadAuthOptions } from 'payload-auth/better-auth'
 import { emailHarmony, phoneHarmony } from 'better-auth-harmony'
 import { admin, phoneNumber, twoFactor, username } from 'better-auth/plugins'
 import { passkey } from '@better-auth/passkey'
 import type { BetterAuthPlugin as BetterAuthPluginType } from 'better-auth/types'
+import { getServerSideURL } from '../getURL'
 
-const baseURL = process.env.NEXT_PUBLIC_BETTER_AUTH_URL || 'http://localhost:3000'
+const baseURL = getServerSideURL()
 
 export const betterAuthPlugins = [
   username(),
@@ -31,7 +32,7 @@ export const betterAuthPlugins = [
 
 export type BetterAuthPlugins = typeof betterAuthPlugins
 
-export const betterAuthOptions = {
+export const betterAuthOptions: BetterAuthOptions = {
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
@@ -73,7 +74,7 @@ export const betterAuthOptions = {
 
 export type ConstructedBetterAuthOptions = typeof betterAuthOptions
 
-export const betterAuthPluginOptions = {
+export const betterAuthPluginOptions: PayloadAuthOptions = {
   disabled: false,
   debug: {
     logTables: false,
@@ -157,6 +158,6 @@ export const betterAuthPluginOptions = {
     },
   },
   betterAuthOptions: betterAuthOptions,
-} satisfies BetterAuthPluginOptions
+}
 
 export type ConstructedBetterAuthPluginOptions = typeof betterAuthPluginOptions
