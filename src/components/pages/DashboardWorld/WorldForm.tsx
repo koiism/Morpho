@@ -9,7 +9,8 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { World, MainAttribute, StatusAttribute } from '@/payload-types'
 import { getCollectionApi } from '@/lib/api/payload'
-import { Loader2, Trash2 } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { AlertCircle, Loader2, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
   Card,
@@ -34,7 +35,7 @@ type FormData = z.infer<typeof formSchema>
 
 interface WorldFormProps {
   initialData?: World | null
-  onSuccess: () => void
+  onSuccess: (data: World) => void
   onCancel: () => void
 }
 
@@ -43,6 +44,7 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
   const tCommon = useTranslations('Common')
 
   const [loading, setLoading] = React.useState(false)
+  const [error, setError] = React.useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -60,6 +62,7 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
 
   const onSubmit = async (data: FormData) => {
     setLoading(true)
+    setError(null)
     try {
       const api = getCollectionApi('worlds')
       const payload = {
@@ -68,14 +71,19 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
         statusAttributes: data.statusAttributes?.map((attr) => attr.id),
       }
 
+      let response
       if (initialData) {
-        await api.update(initialData.id, payload)
+        response = await api.update(initialData.id, payload)
       } else {
-        await api.create(payload)
+        response = await api.create(payload)
       }
-      onSuccess()
-    } catch (error) {
-      console.error(error)
+
+      if (response.data) {
+        onSuccess(response.data)
+      }
+    } catch (err: any) {
+      console.error(err)
+      setError(err?.message || 'Failed to save world')
     } finally {
       setLoading(false)
     }
@@ -139,6 +147,13 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
 
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-4xl mx-auto space-y-8">
+          {error && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
           <Card>
             <CardHeader>
               <CardTitle>{t('basicInfo')}</CardTitle>
@@ -180,9 +195,7 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <Label className="text-base">{t('mainAttributes')}</Label>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {t('mainAttributesDesc')}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-2">{t('mainAttributesDesc')}</p>
                   <Controller
                     control={control}
                     name="mainAttributes"
@@ -208,9 +221,7 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
 
                 <div className="space-y-3">
                   <Label className="text-base">{t('statusAttributes')}</Label>
-                  <p className="text-sm text-muted-foreground mb-2">
-                    {t('statusAttributesDesc')}
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-2">{t('statusAttributesDesc')}</p>
                   <Controller
                     control={control}
                     name="statusAttributes"

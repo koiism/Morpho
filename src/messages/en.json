@@ -80,7 +80,9 @@
     "rules": "World Rules",
     "noRules": "No detailed rules description available.",
     "mainAttributes": "Main Attributes",
-    "statusAttributes": "Status Attributes"
+    "statusAttributes": "Status Attributes",
+    "noAttributes": "No attributes configured.",
+    "noStatus": "No status configured."
   },
   "WorldList": {
     "searchPlaceholder": "Search worlds...",

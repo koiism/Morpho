@@ -80,7 +80,9 @@
     "rules": "世界法则",
     "noRules": "暂无详细法则描述。",
     "mainAttributes": "主属性体系",
-    "statusAttributes": "状态属性"
+    "statusAttributes": "状态属性",
+    "noAttributes": "暂无主属性配置。",
+    "noStatus": "暂无状态属性配置。"
   },
   "WorldList": {
     "searchPlaceholder": "搜索世界...",

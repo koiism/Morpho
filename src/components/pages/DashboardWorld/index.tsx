@@ -13,6 +13,7 @@ export function DashboardWorld() {
   const [selectedWorld, setSelectedWorld] = React.useState<Search | null>(null)
   const [viewMode, setViewMode] = React.useState<'detail' | 'create' | 'edit'>('detail')
   const [editingWorld, setEditingWorld] = React.useState<World | null>(null)
+  const [currentWorld, setCurrentWorld] = React.useState<World | null>(null)
   const [refreshKey, setRefreshKey] = React.useState(0)
 
   const t = useTranslations('WorldList')
@@ -32,10 +33,12 @@ export function DashboardWorld() {
   const handleAdd = () => {
     setViewMode('create')
     setEditingWorld(null)
+    setCurrentWorld(null)
   }
 
   const handleEdit = (world: World) => {
     setEditingWorld(world)
+    setCurrentWorld(world)
     setViewMode('edit')
   }
 
@@ -45,6 +48,7 @@ export function DashboardWorld() {
         await getCollectionApi('worlds').delete(world.id)
         if (selectedWorld?.id === world.id) {
           setSelectedWorld(null)
+          setCurrentWorld(null)
         }
         setRefreshKey((k) => k + 1)
       } catch (error) {
@@ -53,7 +57,8 @@ export function DashboardWorld() {
     }
   }
 
-  const handleFormSuccess = () => {
+  const handleFormSuccess = (data: World) => {
+    setCurrentWorld(data)
     setViewMode('detail')
     setRefreshKey((k) => k + 1)
   }
@@ -69,6 +74,7 @@ export function DashboardWorld() {
         isSelected={selectedWorld?.id === world.id}
         onClick={() => {
           setSelectedWorld(world)
+          setCurrentWorld(null)
           setViewMode('detail')
         }}
       />
@@ -102,6 +108,7 @@ export function DashboardWorld() {
       ) : (
         <WorldDetail
           worldId={(selectedWorld?.doc.value as string) || null}
+          data={currentWorld}
           onEditClick={handleEdit}
           onDeleteClick={handleDelete}
         />
