@@ -10,28 +10,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { World, MainAttribute, StatusAttribute } from '@/payload-types'
 import { getCollectionApi } from '@/lib/api/payload'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { AlertCircle, Loader2, Trash2 } from 'lucide-react'
+import { AlertCircle, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardFooter,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { AsyncSelect } from '@/components/ui/async-select'
 import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
-
-const formSchema = z.object({
-  name: z.string().min(1, 'required'),
-  description: z.string().optional(),
-  mainAttributes: z.array(z.custom<MainAttribute>()).optional(),
-  statusAttributes: z.array(z.custom<StatusAttribute>()).optional(),
-})
-
-type FormData = z.infer<typeof formSchema>
+import { useWorldStore } from './store'
 
 interface WorldFormProps {
   initialData?: World | null
@@ -252,3 +236,12 @@ export function WorldForm({ initialData, onSuccess, onCancel }: WorldFormProps) 
     </div>
   )
 }
+
+const formSchema = z.object({
+  name: z.string().min(1, 'required'),
+  description: z.string().optional(),
+  mainAttributes: z.array(z.custom<MainAttribute>()).optional(),
+  statusAttributes: z.array(z.custom<StatusAttribute>()).optional(),
+})
+
+type FormData = z.infer<typeof formSchema>

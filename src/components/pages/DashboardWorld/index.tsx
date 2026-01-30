@@ -8,13 +8,21 @@ import { WorldForm } from './WorldForm'
 import { Search, World } from '@/payload-types'
 import { getMyWorldSearchList, getCollectionApi } from '@/lib/api/payload'
 import { useTranslations } from 'next-intl'
+import { useWorldStore } from './store'
 
 export function DashboardWorld() {
-  const [selectedWorld, setSelectedWorld] = React.useState<Search | null>(null)
-  const [viewMode, setViewMode] = React.useState<'detail' | 'create' | 'edit'>('detail')
-  const [editingWorld, setEditingWorld] = React.useState<World | null>(null)
-  const [currentWorld, setCurrentWorld] = React.useState<World | null>(null)
-  const [refreshKey, setRefreshKey] = React.useState(0)
+  const {
+    selectedWorldId,
+    currentWorld,
+    viewMode,
+    refreshKey,
+    selectWorld,
+    startCreate,
+    startEdit,
+    handleSuccess,
+    handleCancel,
+    refreshList,
+  } = useWorldStore()
 
   const t = useTranslations('WorldList')
   const tCommon = useTranslations('Common')
@@ -30,56 +38,32 @@ export function DashboardWorld() {
     [refreshKey],
   )
 
-  const handleAdd = () => {
-    setViewMode('create')
-    setEditingWorld(null)
-    setCurrentWorld(null)
-  }
-
-  const handleEdit = (world: World) => {
-    setEditingWorld(world)
-    setCurrentWorld(world)
-    setViewMode('edit')
-  }
-
   const handleDelete = async (world: World) => {
     if (confirm(tCommon('confirmDelete'))) {
       try {
         await getCollectionApi('worlds').delete(world.id)
-        if (selectedWorld?.id === world.id) {
-          setSelectedWorld(null)
-          setCurrentWorld(null)
+        if (selectedWorldId === world.id) {
+          selectWorld(null)
         }
-        setRefreshKey((k) => k + 1)
+        refreshList()
       } catch (error) {
         console.error('Failed to delete world', error)
       }
     }
   }
 
-  const handleFormSuccess = (data: World) => {
-    setCurrentWorld(data)
-    setViewMode('detail')
-    setRefreshKey((k) => k + 1)
-  }
-
-  const handleFormCancel = () => {
-    setViewMode('detail')
-  }
-
   const renderWorldItem = React.useCallback(
-    (world: Search) => (
-      <WorldListItem
-        world={world}
-        isSelected={selectedWorld?.id === world.id}
-        onClick={() => {
-          setSelectedWorld(world)
-          setCurrentWorld(null)
-          setViewMode('detail')
-        }}
-      />
-    ),
-    [selectedWorld?.id],
+    (world: Search) => {
+      const worldId = world.doc.value as string
+      return (
+        <WorldListItem
+          world={world}
+          isSelected={selectedWorldId === worldId}
+          onClick={() => selectWorld(worldId)}
+        />
+      )
+    },
+    [selectedWorldId, selectWorld],
   )
 
   const overviewConfig = React.useMemo(
@@ -91,25 +75,25 @@ export function DashboardWorld() {
       pageInfoText: (current: number, total: number) => t('pageInfo', { current, total }),
       prevPageText: t('prevPage'),
       nextPageText: t('nextPage'),
-      onAddClick: handleAdd,
+      onAddClick: startCreate,
       addText: tCommon('add'),
     }),
-    [fetcher, renderWorldItem, t, tCommon],
+    [fetcher, renderWorldItem, t, tCommon, startCreate],
   )
 
   return (
     <DashboardLayout enableOverviewPanel={true} overviewConfig={overviewConfig}>
       {viewMode === 'create' || viewMode === 'edit' ? (
         <WorldForm
-          initialData={editingWorld}
-          onSuccess={handleFormSuccess}
-          onCancel={handleFormCancel}
+          initialData={viewMode === 'edit' ? currentWorld : null}
+          onSuccess={handleSuccess}
+          onCancel={handleCancel}
         />
       ) : (
         <WorldDetail
-          worldId={(selectedWorld?.doc.value as string) || null}
+          worldId={selectedWorldId}
           data={currentWorld}
-          onEditClick={handleEdit}
+          onEditClick={startEdit}
           onDeleteClick={handleDelete}
         />
       )}

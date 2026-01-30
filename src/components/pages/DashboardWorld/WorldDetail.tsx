@@ -12,6 +12,7 @@ import { getWorldById } from '@/lib/api/payload'
 import { Button } from '@/components/ui/button'
 import { WorldDetailSkeleton } from './components/WorldDetailSkeleton'
 import { AttributeList } from './components/AttributeList'
+import { useWorldStore } from './store'
 
 interface WorldDetailProps {
   worldId: string | null
@@ -22,18 +23,16 @@ interface WorldDetailProps {
 
 export function WorldDetail({ worldId, data, onEditClick, onDeleteClick }: WorldDetailProps) {
   const t = useTranslations('WorldDetail')
-  const [world, setWorld] = React.useState<World | null>(data || null)
+  const { setCurrentWorld } = useWorldStore()
   const [loading, setLoading] = React.useState(false)
 
-  React.useEffect(() => {
-    if (data && data.id === worldId) {
-      setWorld(data)
-      setLoading(false)
-      return
-    }
+  // 使用传入的 data 作为展示数据，如果 data 与 worldId 匹配
+  // 否则在 useEffect 中根据 worldId 获取数据
+  const world = data && data.id === worldId ? data : null
 
-    if (!worldId) {
-      setWorld(null)
+  React.useEffect(() => {
+    // 如果已经有匹配的数据，或者没有 worldId，则不需要请求
+    if (!worldId || (data && data.id === worldId)) {
       return
     }
 
@@ -42,7 +41,7 @@ export function WorldDetail({ worldId, data, onEditClick, onDeleteClick }: World
       try {
         const { data: fetchedData } = await getWorldById(worldId)
         if (fetchedData) {
-          setWorld(fetchedData)
+          setCurrentWorld(fetchedData)
         }
       } catch (error) {
         console.error('Error fetching world:', error)
@@ -52,7 +51,7 @@ export function WorldDetail({ worldId, data, onEditClick, onDeleteClick }: World
     }
 
     fetchWorld()
-  }, [worldId, data])
+  }, [worldId, data, setCurrentWorld])
 
   if (!worldId) {
     return (
@@ -65,7 +64,7 @@ export function WorldDetail({ worldId, data, onEditClick, onDeleteClick }: World
     )
   }
 
-  if (loading) {
+  if (loading && !world) {
     return <WorldDetailSkeleton />
   }
 
@@ -115,9 +114,7 @@ export function WorldDetail({ worldId, data, onEditClick, onDeleteClick }: World
         <div className="p-6 space-y-8">
           {/* Rules Section */}
           <div className="space-y-4">
-            <h2 className="text-lg font-semibold flex items-center gap-2">
-              {t('rules')}
-            </h2>
+            <h2 className="text-lg font-semibold flex items-center gap-2">{t('rules')}</h2>
             <Card>
               <CardContent className="pt-6">
                 {world.description ? (
