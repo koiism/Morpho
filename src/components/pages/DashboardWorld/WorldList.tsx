@@ -11,7 +11,7 @@ interface WorldListItemProps {
   onClick: () => void
 }
 
-export function WorldListItem({ world, isSelected, onClick }: WorldListItemProps) {
+export const WorldListItem = React.memo(({ world, isSelected, onClick }: WorldListItemProps) => {
   return (
     <Card
       className={cn(
@@ -30,4 +30,5 @@ export function WorldListItem({ world, isSelected, onClick }: WorldListItemProps
       )}
     </Card>
   )
-}
+})
+WorldListItem.displayName = 'WorldListItem'

@@ -11,7 +11,7 @@ interface UserNavProps {
   showDetails?: boolean
 }
 
-export function UserNav({ className, isCollapsed, showDetails }: UserNavProps) {
+export const UserNav = React.memo(({ className, isCollapsed, showDetails }: UserNavProps) => {
   const { user } = useUserInfo()
 
   if (!user) return null
@@ -32,4 +32,5 @@ export function UserNav({ className, isCollapsed, showDetails }: UserNavProps) {
       )}
     </div>
   )
-}
+})
+UserNav.displayName = 'UserNav'

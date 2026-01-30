@@ -16,38 +16,37 @@ type ErrorType = GetSessionResult['error']
 const CACHE_KEY = 'morpho_session_cache'
 
 export function useCachedSession() {
-  const [data, setData] = useState<SessionData | null>(null)
-  const [isPending, setIsPending] = useState(true)
+  const [data, setData] = useState<SessionData | null>(() => {
+    if (typeof window === 'undefined') return null
+    // 1. Try to get from localStorage immediately during initialization
+    try {
+      const cached = localStorage.getItem(CACHE_KEY)
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        const expiresAt = new Date(parsed.session.expiresAt)
+        if (expiresAt > new Date()) {
+          return {
+            ...parsed,
+            session: {
+              ...parsed.session,
+              expiresAt,
+            },
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to parse cached session during init', e)
+    }
+    return null
+  })
+  const [isPending, setIsPending] = useState(() => !data)
   const [error, setError] = useState<ErrorType | null>(null)
 
   const fetchSession = useCallback(async (force = false) => {
     try {
-      if (!force) {
-        // 1. Try to get from localStorage
-        const cached = localStorage.getItem(CACHE_KEY)
-        if (cached) {
-          try {
-            const parsed = JSON.parse(cached)
-            const expiresAt = new Date(parsed.session.expiresAt)
-
-            // Check if expired
-            if (expiresAt > new Date()) {
-              setData({
-                ...parsed,
-                session: {
-                  ...parsed.session,
-                  expiresAt,
-                },
-              })
-              setIsPending(false)
-              return
-            }
-          } catch (e) {
-            // Invalid cache, ignore
-            console.warn('Failed to parse cached session', e)
-            localStorage.removeItem(CACHE_KEY)
-          }
-        }
+      if (!force && data) {
+        setIsPending(false)
+        return
       }
 
       // 2. If no cache, expired, or forced, fetch from server

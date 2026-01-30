@@ -88,5 +88,37 @@
     "prevPage": "上一页",
     "nextPage": "下一页",
     "pageInfo": "第 {current} 页 / 共 {total} 页"
+  },
+  "Common": {
+    "save": "保存",
+    "cancel": "取消",
+    "add": "添加",
+    "edit": "编辑",
+    "delete": "删除",
+    "name": "名称",
+    "description": "描述",
+    "required": "必填",
+    "confirmDelete": "确认删除吗？"
+  },
+  "WorldForm": {
+    "createTitle": "创建世界",
+    "editTitle": "编辑世界",
+    "nameLabel": "世界名称",
+    "descriptionLabel": "世界描述",
+    "nameRequired": "请输入世界名称",
+    "editSubtitle": "更新您的世界详情和配置。",
+    "createSubtitle": "创建一个新世界以开始您的冒险。",
+    "basicInfo": "基本信息",
+    "basicInfoDesc": "定义您世界的核心身份。",
+    "namePlaceholder": "例如：被遗忘的国度",
+    "descPlaceholder": "描述历史、地理和氛围...",
+    "gameSystem": "游戏系统",
+    "gameSystemDesc": "配置此世界的规则和属性。",
+    "mainAttributes": "主属性",
+    "mainAttributesDesc": "定义角色的核心属性（如力量、智力）。",
+    "selectMainAttributes": "选择主属性...",
+    "statusAttributes": "状态属性",
+    "statusAttributesDesc": "动态属性（如生命值、法力值、理智值）。",
+    "selectStatusAttributes": "选择状态属性..."
   }
 }

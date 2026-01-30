@@ -81,6 +81,36 @@ export const getCollectionApi = <T extends CollectionKey>(slug: T) => {
         error: typeof error
       }
     },
+    create: async (body: Partial<Collection<T>>) => {
+      const { data, error } = await payloadGet(slug).post(body)
+      return {
+        data,
+        error,
+      } as {
+        data: Collection<T>
+        error: typeof error
+      }
+    },
+    update: async (id: string, body: Partial<Collection<T>>) => {
+      const { data, error } = await payloadGet(slug)({ id }).patch(body)
+      return {
+        data,
+        error,
+      } as {
+        data: Collection<T>
+        error: typeof error
+      }
+    },
+    delete: async (id: string) => {
+      const { data, error } = await payloadGet(slug)({ id }).delete()
+      return {
+        data,
+        error,
+      } as {
+        data: Collection<T>
+        error: typeof error
+      }
+    },
   }
 }
 

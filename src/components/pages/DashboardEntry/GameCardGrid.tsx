@@ -8,7 +8,7 @@ interface GameCardGridProps {
   className?: string
 }
 
-export function GameCardGrid({ items, className }: GameCardGridProps) {
+export const GameCardGrid = React.memo(({ items, className }: GameCardGridProps) => {
   if (!items || items.length === 0) {
     return null
   }
@@ -23,4 +23,5 @@ export function GameCardGrid({ items, className }: GameCardGridProps) {
       ))}
     </div>
   )
-}
+})
+GameCardGrid.displayName = 'GameCardGrid'

@@ -30,12 +30,23 @@ export function DashboardLayout({
   const router = useRouter()
   const items = useNavItems()
 
-  const activeIndex = items.findIndex((item) => {
-    if (item.href === '/') return pathname === '/'
-    return pathname?.startsWith(item.href)
-  })
+  const activeIndex = React.useMemo(() => {
+    return items.findIndex((item) => {
+      if (item.href === '/') return pathname === '/'
+      return pathname?.startsWith(item.href)
+    })
+  }, [items, pathname])
 
   const showOverview = enableOverviewPanel && !!overviewConfig
+
+  const mobileNavItems = React.useMemo(() => {
+    return items.map((item) => ({
+      id: item.id,
+      icon: <item.icon />,
+      label: item.title,
+      onClick: () => router.push(item.href),
+    }))
+  }, [items, router])
 
   return (
     <div className="h-screen w-full bg-background overflow-hidden">
@@ -116,12 +127,7 @@ export function DashboardLayout({
         <div className="flex-1 overflow-y-auto bg-background/50 backdrop-blur-sm">{children}</div>
         <div className="shrink-0">
           <LimelightNav
-            items={items.map((item) => ({
-              id: item.id,
-              icon: <item.icon />,
-              label: item.title,
-              onClick: () => router.push(item.href),
-            }))}
+            items={mobileNavItems}
             activeIndex={activeIndex === -1 ? 0 : activeIndex}
             className="w-full rounded-none border-t border-x-0 border-b-0 justify-between px-4"
             iconContainerClassName="flex-1"

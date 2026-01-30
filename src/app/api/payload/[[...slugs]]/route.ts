@@ -49,6 +49,60 @@ const app = new Elysia({ prefix: '/api/payload' })
       params: PayloadModel.findByIdParams,
     },
   )
+  // 创建记录
+  .post(
+    '/:slugs',
+    async ({ params: { slugs }, body, getPayload, getSession, request }) => {
+      const { user } = await getSession({ request })
+      const payload = await getPayload()
+      return await payload.create({
+        collection: slugs,
+        data: body,
+        overrideAccess: false,
+        user,
+      })
+    },
+    {
+      params: PayloadModel.findParams,
+      body: PayloadModel.createBody,
+    },
+  )
+  // 更新记录
+  .patch(
+    '/:slugs/:id',
+    async ({ params: { slugs, id }, body, getPayload, getSession, request }) => {
+      const { user } = await getSession({ request })
+      const payload = await getPayload()
+      return await payload.update({
+        collection: slugs,
+        id,
+        data: body,
+        overrideAccess: false,
+        user,
+      })
+    },
+    {
+      params: PayloadModel.findByIdParams,
+      body: PayloadModel.updateBody,
+    },
+  )
+  // 删除记录
+  .delete(
+    '/:slugs/:id',
+    async ({ params: { slugs, id }, getPayload, getSession, request }) => {
+      const { user } = await getSession({ request })
+      const payload = await getPayload()
+      return await payload.delete({
+        collection: slugs,
+        id,
+        overrideAccess: false,
+        user,
+      })
+    },
+    {
+      params: PayloadModel.findByIdParams,
+    },
+  )
   // 查找我的记录
   .get(
     '/my/:slugs',
@@ -181,3 +235,6 @@ const app = new Elysia({ prefix: '/api/payload' })
 export type APP = typeof app
 
 export const GET = app.handle
+export const POST = app.handle
+export const PATCH = app.handle
+export const DELETE = app.handle

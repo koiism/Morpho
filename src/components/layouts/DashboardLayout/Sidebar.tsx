@@ -10,12 +10,16 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   isCollapsed?: boolean
 }
 
-export function Sidebar({ className, isCollapsed }: SidebarProps) {
+export const Sidebar = React.memo(({ className, isCollapsed }: SidebarProps) => {
   const pathname = usePathname()
   const items = useNavItems()
 
-  const mainNavItems = items.filter((item) => item.id !== 'settings')
-  const settingsItem = items.find((item) => item.id === 'settings')
+  const { mainNavItems, settingsItem } = React.useMemo(() => {
+    return {
+      mainNavItems: items.filter((item) => item.id !== 'settings'),
+      settingsItem: items.find((item) => item.id === 'settings'),
+    }
+  }, [items])
 
   return (
     <div className={cn('flex h-full flex-col gap-2 bg-muted/10', className)}>
@@ -86,4 +90,5 @@ export function Sidebar({ className, isCollapsed }: SidebarProps) {
       </div>
     </div>
   )
-}
+})
+Sidebar.displayName = 'Sidebar'

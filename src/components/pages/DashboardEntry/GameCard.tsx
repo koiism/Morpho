@@ -17,7 +17,7 @@ interface GameCardProps {
   className?: string
 }
 
-export function GameCard({
+export const GameCard = React.memo(({
   title,
   description,
   image,
@@ -25,7 +25,7 @@ export function GameCard({
   type,
   lastPlayed,
   className,
-}: GameCardProps) {
+}: GameCardProps) => {
   const t = useTranslations('Dashboard.entry.actions')
 
   return (
@@ -40,6 +40,8 @@ export function GameCard({
           <Image
             src={image}
             alt={title}
+            width={400}
+            height={200}
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
@@ -90,4 +92,5 @@ export function GameCard({
       </CardFooter>
     </Card>
   )
-}
+})
+GameCard.displayName = 'GameCard'

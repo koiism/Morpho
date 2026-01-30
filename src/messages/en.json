@@ -88,5 +88,37 @@
     "prevPage": "Previous",
     "nextPage": "Next",
     "pageInfo": "Page {current} of {total}"
+  },
+  "Common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "name": "Name",
+    "description": "Description",
+    "required": "Required",
+    "confirmDelete": "Are you sure you want to delete?"
+  },
+  "WorldForm": {
+    "createTitle": "Create World",
+    "editTitle": "Edit World",
+    "nameLabel": "World Name",
+    "descriptionLabel": "World Description",
+    "nameRequired": "Please enter world name",
+    "editSubtitle": "Update your world details and configuration.",
+    "createSubtitle": "Create a new world to start your adventure.",
+    "basicInfo": "Basic Information",
+    "basicInfoDesc": "Define the core identity of your world.",
+    "namePlaceholder": "e.g. The Forgotten Realms",
+    "descPlaceholder": "Describe the history, geography, and atmosphere...",
+    "gameSystem": "Game System",
+    "gameSystemDesc": "Configure the rules and attributes for this world.",
+    "mainAttributes": "Main Attributes",
+    "mainAttributesDesc": "Core stats defining characters (e.g. Strength, Intelligence).",
+    "selectMainAttributes": "Select main attributes...",
+    "statusAttributes": "Status Attributes",
+    "statusAttributesDesc": "Dynamic stats (e.g. HP, MP, Sanity).",
+    "selectStatusAttributes": "Select status attributes..."
   }
 }

@@ -15,4 +15,6 @@ export const PayloadModel = {
     query: z.string().optional(),
     ...findSchema.shape,
   }),
+  createBody: z.record(z.string(), z.any()),
+  updateBody: z.record(z.string(), z.any()),
 }

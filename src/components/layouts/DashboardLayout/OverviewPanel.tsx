@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Search, Loader2, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Search, Loader2, ChevronLeft, ChevronRight, Plus } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '@/components/ui/button'
@@ -14,26 +14,35 @@ export interface SearchListConfig<T> extends UseSearchListOptions<T> {
   pageInfoText?: (current: number, total: number) => string
   prevPageText?: string
   nextPageText?: string
+  onAddClick?: () => void
+  addText?: string
 }
 
 interface OverviewPanelProps<T> {
   config: SearchListConfig<T>
 }
 
-export function OverviewPanel<T>({ config }: OverviewPanelProps<T>) {
+export const OverviewPanel = React.memo(<T,>({ config }: OverviewPanelProps<T>) => {
   const { searchQuery, setSearchQuery, data, page, setPage, totalPages, loading } =
     useSearchList(config)
 
   return (
     <div className="flex flex-col h-full gap-4 p-4">
-      <div className="relative">
-        <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={config.searchPlaceholder || 'Search...'}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-8"
-        />
+      <div className="flex items-center gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder={config.searchPlaceholder || 'Search...'}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-8"
+          />
+        </div>
+        {config.onAddClick && (
+          <Button onClick={config.onAddClick} size="icon" aria-label={config.addText || 'Add'}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       <ScrollArea className="flex-1 -mx-4 px-4 min-h-0">
         <div className="flex flex-col gap-2 pb-4">
@@ -82,4 +91,5 @@ export function OverviewPanel<T>({ config }: OverviewPanelProps<T>) {
       </div>
     </div>
   )
-}
+})
+OverviewPanel.displayName = 'OverviewPanel'

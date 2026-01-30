@@ -25,6 +25,7 @@ export const findSchema = z.object({
     .transform((val) => parseInt(val || ''))
     .optional()
     .describe('查询深度'),
+  where: z.any().optional().describe('查询条件'),
 })
 
 export type FindQuery = z.infer<typeof findSchema>
